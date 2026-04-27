@@ -1,0 +1,393 @@
+// ============================================
+// STARS — Node.js / Express Backend
+// ============================================
+
+const express    = require('express');
+const mysql      = require('mysql2/promise');
+const crypto     = require('crypto');
+const jwt        = require('jsonwebtoken');
+const cors       = require('cors');
+const multer     = require('multer');
+const path       = require('path');
+const fs         = require('fs');
+
+// ✅ MD5 helper
+function md5(str) {
+  return crypto.createHash('md5').update(str).digest('hex');
+}
+
+const app  = express();
+const PORT = 8081;
+const JWT_SECRET = 'stars_secret_key_change_in_production';
+
+// ---- MIDDLEWARE ----
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+app.use(express.json());
+app.use('/uploads', express.static('uploads'));
+
+// ---- FILE UPLOAD ----
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const dir = 'uploads';
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir);
+    cb(null, dir);
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`);
+  }
+});
+const upload = multer({
+  storage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
+  fileFilter: (req, file, cb) => {
+    const allowed = ['.jpg', '.jpeg', '.png', '.pdf'];
+    const ext = path.extname(file.originalname).toLowerCase();
+    if (allowed.includes(ext)) cb(null, true);
+    else cb(new Error('Invalid file type.'));
+  }
+});
+
+// ---- DATABASE ----
+const db = mysql.createPool({
+  host:     'localhost',
+  user:     'root',       // <-- palitan ng iyong MySQL username
+  password: '',           // <-- palitan ng iyong MySQL password
+  database: 'stars_db',
+  waitForConnections: true,
+  connectionLimit: 10
+});
+
+// ---- AUTH MIDDLEWARE ----
+function authMiddleware(req, res, next) {
+  const header = req.headers['authorization'];
+  if (!header) return res.status(401).json({ message: 'Unauthorized' });
+  const token = header.split(' ')[1];
+  try {
+    req.user = jwt.verify(token, JWT_SECRET);
+    next();
+  } catch {
+    return res.status(401).json({ message: 'Invalid token' });
+  }
+}
+
+// ============================================
+// ROUTES
+// ============================================
+
+// ✅ POST /api/auth/login
+app.post('/api/auth/login', async (req, res) => {
+  const { studentId, password } = req.body;
+  if (!studentId || !password)
+    return res.status(400).json({ success: false, message: 'Student ID and password are required.' });
+
+  try {
+    const [rows] = await db.query(
+      'SELECT * FROM students WHERE student_id = ?', [studentId]
+    );
+    if (rows.length === 0)
+      return res.status(401).json({ success: false, message: 'Invalid Student ID or password.' });
+
+    const student = rows[0];
+
+    const hashedInput = md5(password);
+    if (hashedInput !== student.password)
+      return res.status(401).json({ success: false, message: 'Invalid Student ID or password.' });
+
+    const token = jwt.sign(
+      { id: student.id, student_id: student.student_id },
+      JWT_SECRET,
+      { expiresIn: '8h' }
+    );
+
+    res.json({
+      success:    true,
+      token,                            // ✅ Real JWT token
+      fullName:   student.full_name,
+      studentId:  student.student_id,
+      email:      student.email      || '',
+      program:    student.program    || '',
+      block:      student.block      || '',
+      yearLevel:  student.year_level || ''
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Server error.' });
+  }
+});
+
+// ✅ POST /api/students/register
+app.post('/api/students/register', async (req, res) => {
+  const { fullName, studentId, email, program, block, yearLevel, password } = req.body;
+
+  if (!fullName || !studentId || !email || !password)
+    return res.status(400).json({ success: false, message: 'Missing required fields.' });
+
+  try {
+    const [existing] = await db.query(
+      'SELECT id FROM students WHERE student_id = ?', [studentId]
+    );
+    if (existing.length > 0)
+      return res.status(400).json({ success: false, message: 'Student ID already registered.' });
+
+    const [existingEmail] = await db.query(
+      'SELECT id FROM students WHERE email = ?', [email]
+    );
+    if (existingEmail.length > 0)
+      return res.status(400).json({ success: false, message: 'Email already registered.' });
+
+    const hashedPassword = md5(password);
+
+    await db.query(
+      `INSERT INTO students (student_id, full_name, email, program, block, year_level, password)
+       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      [studentId, fullName, email, program || '', block || '', yearLevel || '', hashedPassword]
+    );
+
+    res.json({ success: true, message: 'Registration successful!' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Server error.' });
+  }
+});
+
+// ✅ POST /api/auth/change-password
+app.post('/api/auth/change-password', async (req, res) => {
+  const { studentId, currentPassword, newPassword } = req.body;
+
+  try {
+    const [rows] = await db.query(
+      'SELECT * FROM students WHERE student_id = ?', [studentId]
+    );
+    if (rows.length === 0)
+      return res.status(404).json({ success: false, message: 'Student not found.' });
+
+    const student = rows[0];
+
+    if (md5(currentPassword) !== student.password)
+      return res.status(401).json({ success: false, message: 'Current password is incorrect.' });
+
+    await db.query(
+      'UPDATE students SET password = ? WHERE student_id = ?',
+      [md5(newPassword), studentId]
+    );
+
+    res.json({ success: true, message: 'Password updated successfully.' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Server error.' });
+  }
+});
+
+// ✅ GET /api/points/:student_id — FIX: consistent response format
+app.get('/api/points/:student_id', authMiddleware, async (req, res) => {
+  try {
+    const [categories] = await db.query(
+      `SELECT c.category_code, c.category_name,
+              COALESCE(SUM(s.points_awarded), 0) AS points_earned
+       FROM categories c
+       LEFT JOIN submissions s
+         ON s.category_id = c.id
+        AND s.student_id  = ?
+        AND s.status      = 'approved'
+       GROUP BY c.id`,
+      [req.params.student_id]
+    );
+
+    const [totRows] = await db.query(
+      `SELECT COALESCE(SUM(points_awarded), 0) AS total
+       FROM submissions
+       WHERE student_id = ? AND status = 'approved'`,
+      [req.params.student_id]
+    );
+
+    res.json({
+      success:    true,
+      total:      totRows[0].total,   // ✅ api.js reads data.total
+      categories                      // ✅ api.js reads data.categories
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Server error.' });
+  }
+});
+
+// ✅ GET /api/submissions/:student_id — FIX: wrap in { success, submissions }
+app.get('/api/submissions/:student_id', authMiddleware, async (req, res) => {
+  try {
+    const [rows] = await db.query(
+      `SELECT s.id, s.title, s.description, s.points_requested, s.points_awarded,
+              s.status, s.submitted_at, c.category_name
+       FROM submissions s
+       JOIN categories c ON s.category_id = c.id
+       WHERE s.student_id = ?
+       ORDER BY s.submitted_at DESC`,
+      [req.params.student_id]
+    );
+
+    // ✅ FIX: Return wrapped object so dashboard.js can read subData.success + subData.submissions
+    res.json({ success: true, submissions: rows });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Server error.' });
+  }
+});
+
+// ✅ POST /api/submissions
+app.post('/api/submissions', authMiddleware, upload.single('proof'), async (req, res) => {
+  const { title, category_id, description, points_requested, pin_code } = req.body;
+  const student_id = req.user.student_id;
+
+  if (!title || !category_id || !points_requested)
+    return res.status(400).json({ success: false, message: 'Missing required fields.' });
+
+  try {
+    // ---- PIN VALIDATION (Lost & Found category only) ----
+    if (parseInt(category_id) === 6) {
+      if (!pin_code || pin_code.trim() === '') {
+        return res.status(400).json({ success: false, message: 'PIN code is required for Lost & Found.' });
+      }
+
+      const [pinRows] = await db.query(
+        'SELECT id, student_id FROM lost_found_certificates WHERE pin_code = ? AND is_used = 0',
+        [pin_code.trim()]
+      );
+
+      if (pinRows.length === 0) {
+        return res.status(400).json({ success: false, message: 'Invalid or already used PIN code.' });
+      }
+
+      const pin_owner = pinRows[0].student_id;
+      if (pin_owner !== student_id) {
+        return res.status(400).json({ success: false, message: 'This PIN does not belong to your account.' });
+      }
+
+      await db.query(
+        'UPDATE lost_found_certificates SET is_used = 1, used_at = NOW() WHERE id = ?',
+        [pinRows[0].id]
+      );
+    }
+
+    // ---- INSERT SUBMISSION ----
+    const proof_path = req.file ? req.file.filename : null;
+    await db.query(
+      `INSERT INTO submissions
+        (student_id, category_id, title, description, points_requested, proof_path, status)
+       VALUES (?, ?, ?, ?, ?, ?, 'pending')`,
+      [student_id, category_id, title, description || '', points_requested, proof_path]
+    );
+    res.json({ success: true, message: 'Submission received!' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Server error.' });
+  }
+});
+
+// ✅ GET /api/rewards — FIX: wrap in { success, rewards } for consistency
+app.get('/api/rewards', authMiddleware, async (req, res) => {
+  try {
+    const [rows] = await db.query(
+      'SELECT * FROM rewards WHERE is_active = 1 ORDER BY points_required ASC'
+    );
+    res.json({ success: true, rewards: rows });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Server error.' });
+  }
+});
+
+// ✅ POST /api/rewards/redeem
+app.post('/api/rewards/redeem', authMiddleware, async (req, res) => {
+  const { rewardId } = req.body;
+  const student_id = req.user.student_id;
+
+  try {
+    const [rewards] = await db.query(
+      'SELECT * FROM rewards WHERE reward_id = ? AND is_active = 1', [rewardId]
+    );
+    if (rewards.length === 0)
+      return res.json({ success: false, message: 'Reward not found.' });
+
+    const reward = rewards[0];
+
+    const [totRows] = await db.query(
+      `SELECT COALESCE(SUM(points_awarded), 0) AS total
+       FROM submissions WHERE student_id = ? AND status = 'approved'`,
+      [student_id]
+    );
+    const balance = totRows[0].total;
+
+    const [existing] = await db.query(
+      `SELECT id FROM redemptions
+       WHERE student_id = ? AND reward_id = ? AND claimed = 0`,
+      [student_id, rewardId]
+    );
+    if (existing.length > 0)
+      return res.json({ success: false, message: 'You already have a pending redemption for this reward.' });
+
+    if (balance < reward.points_required)
+      return res.json({ success: false, message: 'Not enough points.' });
+
+    await db.query(
+      'INSERT INTO redemptions (student_id, reward_id) VALUES (?, ?)',
+      [student_id, rewardId]
+    );
+    res.json({ success: true, message: 'Reward redeemed! Show this to your coordinator.' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Server error.' });
+  }
+});
+
+// ✅ GET /api/rewards/history/:student_id
+app.get('/api/rewards/history/:student_id', authMiddleware, async (req, res) => {
+  try {
+    const [rows] = await db.query(
+      `SELECT r.reward_name, r.points_required,
+              rd.redeemed_at, rd.claimed
+       FROM redemptions rd
+       JOIN rewards r ON rd.reward_id = r.reward_id
+       WHERE rd.student_id = ?
+       ORDER BY rd.redeemed_at DESC`,
+      [req.params.student_id]
+    );
+    res.json({ success: true, history: rows });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Server error.' });
+  }
+});
+
+// ✅ GET /api/ranking
+app.get('/api/ranking', authMiddleware, async (req, res) => {
+  try {
+    const { year } = req.query;
+    let query = `
+      SELECT s.student_id, s.full_name, s.program, s.year_level, s.block,
+             COALESCE(SUM(sub.points_awarded), 0) AS total_points
+      FROM students s
+      LEFT JOIN submissions sub
+        ON sub.student_id = s.student_id AND sub.status = 'approved'
+    `;
+    const params = [];
+    if (year) {
+      query += ' WHERE s.year_level = ?';
+      params.push(year);
+    }
+    query += ' GROUP BY s.student_id ORDER BY total_points DESC LIMIT 50';
+
+    const [rows] = await db.query(query, params);
+    res.json({ success: true, ranking: rows });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Server error.' });
+  }
+});
+
+// ---- START ----
+app.listen(PORT, () => {
+  console.log(`✅ STARS backend running on http://localhost:${PORT}`);
+});

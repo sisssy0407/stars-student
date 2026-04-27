@@ -1,0 +1,519 @@
+/* ============================================
+   STARS — Guidelines CSS
+   ============================================ */
+
+/* ── Tab Switcher ── */
+.guide-tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.guide-tab {
+  background: var(--white);
+  border: 1.5px solid var(--gray2);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 10px 18px;
+  cursor: pointer;
+  color: var(--gray);
+  transition: all 0.2s;
+  letter-spacing: 0.3px;
+}
+.guide-tab:hover {
+  border-color: var(--orange);
+  color: var(--orange);
+}
+.guide-tab.active {
+  background: linear-gradient(135deg, var(--orange), var(--orange2));
+  border-color: transparent;
+  color: var(--white);
+  box-shadow: 0 4px 14px rgba(242,101,34,0.3);
+}
+
+/* ── Guide Section ── */
+.guide-section h3 {
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--slate);
+  margin-bottom: 8px;
+  letter-spacing: 0.4px;
+}
+.guide-intro {
+  color: var(--gray);
+  font-size: 14px;
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+/* ── Steps List ── */
+.steps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 16px;
+}
+.step-item {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+.step-num {
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  background: linear-gradient(135deg, var(--orange), var(--orange2));
+  color: var(--white);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 800;
+  box-shadow: 0 4px 12px rgba(242,101,34,0.25);
+}
+.step-body { flex: 1; }
+.step-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--slate);
+  margin-bottom: 4px;
+}
+.step-desc {
+  font-size: 13px;
+  color: var(--gray);
+  line-height: 1.6;
+}
+
+/* ── Category Cards ── */
+.category-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  margin-top: 8px;
+}
+.cat-card {
+  background: var(--white);
+  border: 1.5px solid var(--gray2);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: transform 0.15s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.cat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+.cat-card.scholar  { border-top: 3px solid var(--scholar); }
+.cat-card.punctual { border-top: 3px solid var(--punctual); }
+.cat-card.achiever { border-top: 3px solid var(--achiever); }
+.cat-card.engage   { border-top: 3px solid var(--engage); }
+.cat-card.general  { border-top: 3px solid var(--gray); }
+
+.cat-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.cat-icon { font-size: 26px; }
+.cat-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--slate);
+  margin-bottom: 3px;
+}
+
+.points-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.points-table th {
+  text-align: left;
+  padding: 7px 10px;
+  color: var(--gray);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  font-weight: 700;
+  border-bottom: 2px solid var(--gray3);
+}
+.points-table td {
+  padding: 9px 10px;
+  border-bottom: 1px solid var(--gray3);
+  color: var(--slate);
+}
+.points-table tr:last-child td { border-bottom: none; }
+.points-table td strong { color: var(--orange); }
+
+/* ── Rewards Threshold ── */
+.rewards-threshold-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+}
+.threshold-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--gray3);
+  border-radius: var(--radius-sm);
+  padding: 14px 18px;
+  border: 1.5px solid var(--gray2);
+  transition: border-color 0.2s;
+}
+.threshold-item:hover { border-color: var(--orange); }
+.threshold-pts {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--orange);
+  min-width: 70px;
+  text-align: center;
+}
+.threshold-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--slate);
+  margin-bottom: 2px;
+}
+.threshold-desc {
+  font-size: 12px;
+  color: var(--gray);
+}
+
+/* ── Rules List ── */
+.rules-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+.rules-list li {
+  font-size: 14px;
+  color: var(--slate);
+  line-height: 1.6;
+  padding: 10px 14px;
+  background: var(--gray3);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--gray2);
+}
+.rules-list li:has(✅) { border-left-color: var(--scholar); }
+.rules-list li:has(❌) { border-left-color: var(--error); }
+
+/* ── Admin Tables ── */
+.admin-category-block {
+  margin-bottom: 24px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1.5px solid var(--gray2);
+}
+.admin-cat-title {
+  padding: 12px 18px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: 0.3px;
+}
+.scholar-bg  { background: linear-gradient(135deg, #16a34a, #22c55e); }
+.punctual-bg { background: linear-gradient(135deg, #1d4ed8, #3b82f6); }
+.achiever-bg { background: linear-gradient(135deg, #c2410c, var(--orange)); }
+.engage-bg   { background: linear-gradient(135deg, #7e22ce, #a855f7); }
+.general-bg  { background: linear-gradient(135deg, #4b5563, #6b7280); }
+
+.admin-points-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+  background: var(--white);
+}
+.admin-points-table th {
+  text-align: left;
+  padding: 10px 16px;
+  color: var(--gray);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  font-weight: 700;
+  border-bottom: 2px solid var(--gray3);
+  background: var(--off-white);
+}
+.admin-points-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--gray3);
+  color: var(--slate);
+}
+.admin-points-table tr:last-child td { border-bottom: none; }
+.admin-points-table tr:hover td { background: var(--off-white); }
+.pts-cell {
+  font-weight: 800;
+  color: var(--orange);
+  font-family: var(--font-display);
+  font-size: 15px;
+  white-space: nowrap;
+}
+
+/* ── Dark Mode Toggle in Sidebar ── */
+.dark-mode-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 4px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.dark-mode-label {
+  color: rgba(255,255,255,0.6);
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 42px;
+  height: 24px;
+  cursor: pointer;
+}
+.toggle-switch input { display: none; }
+.toggle-slider {
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.15);
+  border-radius: 99px;
+  transition: background 0.3s;
+}
+.toggle-slider::before {
+  content: '';
+  position: absolute;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--white);
+  top: 3px; left: 3px;
+  transition: transform 0.3s;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+.toggle-switch input:checked + .toggle-slider {
+  background: var(--orange);
+}
+.toggle-switch input:checked + .toggle-slider::before {
+  transform: translateX(18px);
+}
+
+/* ── DARK MODE OVERRIDES ── */
+body.dark-mode {
+  background: #0f0f1a;
+  color: #e8e0d8;
+}
+body.dark-mode .main-content {
+  background: #0f0f1a;
+}
+body.dark-mode .section-block,
+body.dark-mode .cat-card,
+body.dark-mode .admin-points-table,
+body.dark-mode .form-card,
+body.dark-mode .modal-box {
+  background: #1a1a2e;
+  border-color: #2a2a3e;
+}
+body.dark-mode .guide-section h3,
+body.dark-mode .step-title,
+body.dark-mode .cat-name,
+body.dark-mode .threshold-name,
+body.dark-mode .page-title {
+  color: #f0ebe3;
+}
+body.dark-mode .threshold-item,
+body.dark-mode .rules-list li {
+  background: #1e1e30;
+  border-color: #2a2a3e;
+}
+body.dark-mode .rules-list li {
+  color: #e8e0d8;
+}
+body.dark-mode .step-desc,
+body.dark-mode .guide-intro,
+body.dark-mode .threshold-desc,
+body.dark-mode .reward-desc,
+body.dark-mode .reward-name,
+body.dark-mode .points-label,
+body.dark-mode .points-unit,
+body.dark-mode .cat-name {
+  color: #c8c0b8;
+}
+body.dark-mode .threshold-name { color: #e8e0d8; }
+body.dark-mode .points-table th,
+body.dark-mode .admin-points-table th {
+  background: #1e1e30;
+  border-color: #2a2a3e;
+}
+body.dark-mode .points-table td,
+body.dark-mode .admin-points-table td {
+  border-color: #2a2a3e;
+  color: #c8c0b8;
+}
+body.dark-mode .admin-points-table tr:hover td {
+  background: #22223a;
+}
+body.dark-mode .guide-tab {
+  background: #1a1a2e;
+  border-color: #2a2a3e;
+  color: rgba(255,255,255,0.5);
+}
+body.dark-mode .points-overview .points-card,
+body.dark-mode .reward-card {
+  background: #1a1a2e;
+  border-color: #2a2a3e;
+}
+body.dark-mode .data-table th { border-color: #2a2a3e; }
+body.dark-mode .data-table td { border-color: #2a2a3e; color: #c8c0b8; }
+body.dark-mode .data-table tr:hover td { background: #22223a; }
+body.dark-mode .page-sub { color: #6a6a7a; }
+body.dark-mode .balance-pill {
+  background: #1a1a2e;
+  border-color: #2a2a3e;
+}
+body.dark-mode .form-group input,
+body.dark-mode .form-group select,
+body.dark-mode .form-group textarea {
+  background: #1e1e30;
+  border-color: #2a2a3e;
+  color: #e8e0d8;
+}
+body.dark-mode .upload-zone {
+  background: #1e1e30;
+  border-color: #2a2a3e;
+}
+body.dark-mode .skeleton {
+  background: linear-gradient(90deg, #1e2846 25%, #2a3560 50%, #1e2846 75%);
+  background-size: 200% 100%;
+}
+
+/* ============================================
+   RESPONSIVE — Guidelines & All Pages
+   ============================================ */
+
+/* ── TABLET (max 1024px) ── */
+@media (max-width: 1024px) {
+  .category-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ── MOBILE (max 768px) ── */
+@media (max-width: 768px) {
+
+  /* Guide sections */
+  .guide-section h3 {
+    font-size: 16px;
+  }
+  .guide-intro {
+    font-size: 13px;
+  }
+
+  /* Category cards — 1 column on mobile */
+  .category-cards {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .cat-card {
+    padding: 16px;
+  }
+  .cat-icon { font-size: 22px; }
+  .cat-name { font-size: 13px; }
+
+  /* Points table inside cat cards */
+  .points-table th,
+  .points-table td {
+    padding: 7px 8px;
+    font-size: 12px;
+  }
+
+  /* Steps list */
+  .step-title { font-size: 14px; }
+  .step-desc  { font-size: 12px; }
+  .step-num   { width: 30px; height: 30px; min-width: 30px; font-size: 13px; }
+
+  /* Threshold items */
+  .threshold-item {
+    padding: 12px 14px;
+    gap: 12px;
+  }
+  .threshold-pts {
+    font-size: 18px;
+    min-width: 56px;
+  }
+  .threshold-name { font-size: 13px; }
+  .threshold-desc { font-size: 11px; }
+
+  /* Rules list */
+  .rules-list li {
+    font-size: 13px;
+    padding: 9px 12px;
+  }
+
+  /* Admin tables */
+  .admin-points-table th,
+  .admin-points-table td {
+    padding: 9px 10px;
+    font-size: 12px;
+  }
+  .pts-cell { font-size: 13px; }
+
+  /* Guide tabs — wrap on mobile */
+  .guide-tabs {
+    gap: 6px;
+  }
+  .guide-tab {
+    padding: 8px 14px;
+    font-size: 12px;
+  }
+}
+
+/* ── SMALL PHONES (max 480px) ── */
+@media (max-width: 480px) {
+
+  /* Category cards */
+  .category-cards {
+    grid-template-columns: 1fr;
+  }
+  .cat-card { padding: 14px; }
+
+  /* Steps */
+  .step-item { gap: 10px; }
+
+  /* Threshold */
+  .threshold-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 12px;
+  }
+  .threshold-pts {
+    min-width: unset;
+    text-align: left;
+  }
+
+  /* Rules */
+  .rules-list li { font-size: 12px; }
+
+  /* Admin table — scrollable */
+  .admin-category-block {
+    overflow-x: auto;
+  }
+  .admin-points-table {
+    min-width: 320px;
+  }
+
+  /* Guide tabs */
+  .guide-tabs { gap: 4px; }
+  .guide-tab  { padding: 7px 10px; font-size: 11px; }
+}

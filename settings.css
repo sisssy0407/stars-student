@@ -1,0 +1,168 @@
+/* ============================================
+   STARS — Settings CSS
+   ============================================ */
+
+.settings-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 680px;
+}
+
+/* Section title with icon */
+.settings-section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1.5px solid var(--gray2);
+}
+.settings-section-title h3 {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--slate);
+  margin: 0 !important;
+  letter-spacing: 0.4px;
+}
+.settings-icon { font-size: 20px; }
+
+/* Profile fields (read-only) */
+.settings-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+.settings-field label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gray);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  display: block;
+  margin-bottom: 6px;
+}
+.settings-readonly {
+  background: var(--gray3);
+  border: 1.5px solid var(--gray2);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  font-size: 15px;
+  color: var(--slate);
+  font-weight: 500;
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.settings-note {
+  font-size: 12px;
+  color: var(--gray);
+  background: var(--yellow-dim);
+  border: 1.5px solid rgba(255,193,7,0.25);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  line-height: 1.6;
+}
+
+/* Change password form */
+.settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.settings-btn {
+  width: fit-content !important;
+  padding: 12px 28px !important;
+}
+
+/* Appearance toggle row */
+.settings-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 4px 0;
+}
+.settings-toggle-label {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--slate);
+  margin-bottom: 2px;
+}
+.settings-toggle-desc {
+  font-size: 12px;
+  color: var(--gray);
+}
+
+/* About list */
+.settings-about-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.settings-about-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--gray3);
+  gap: 12px;
+}
+.settings-about-row:last-child { border-bottom: none; }
+.about-label {
+  font-size: 13px;
+  color: var(--gray);
+  font-weight: 600;
+  min-width: 120px;
+}
+.about-value {
+  font-size: 13px;
+  color: var(--slate);
+  font-weight: 500;
+  text-align: right;
+}
+
+/* ── DARK MODE ── */
+body.dark-mode .settings-section-title {
+  border-color: #2a2a3e;
+}
+body.dark-mode .settings-section-title h3 {
+  color: #f0ebe3;
+}
+body.dark-mode .settings-readonly {
+  background: #1e1e30;
+  border-color: #2a2a3e;
+  color: #e8e0d8;
+}
+body.dark-mode .settings-note {
+  background: rgba(255,193,7,0.07);
+  border-color: rgba(255,193,7,0.15);
+  color: #c8c0b8;
+}
+body.dark-mode .settings-toggle-label { color: #e8e0d8; }
+body.dark-mode .settings-toggle-desc  { color: #6a6a7a; }
+body.dark-mode .about-label  { color: #6a6a7a; }
+body.dark-mode .about-value  { color: #c8c0b8; }
+body.dark-mode .settings-about-row { border-color: #2a2a3e; }
+
+/* ── MOBILE (max 768px) ── */
+@media (max-width: 768px) {
+  .settings-wrap { gap: 14px; }
+  .settings-btn  { width: 100% !important; }
+  .about-label   { min-width: 100px; font-size: 12px; }
+  .about-value   { font-size: 12px; }
+}
+
+/* ── SMALL PHONES (max 480px) ── */
+@media (max-width: 480px) {
+  .settings-about-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    padding: 10px 0;
+  }
+  .about-value { text-align: left; }
+  .settings-toggle-row { flex-wrap: wrap; gap: 10px; }
+} 	

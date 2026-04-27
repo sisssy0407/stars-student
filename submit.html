@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>STARS — Submit Achievement</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="dashboard.css"/>
+  <link rel="stylesheet" href="guidelines.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+</head>
+<body class="app-page">
+
+  <!-- HAMBURGER BUTTON -->
+  <button class="hamburger-btn" id="hamburgerBtn" aria-label="Open menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <!-- OVERLAY -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand"><span class="brand-star">★</span><span>STARS</span></div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item"><span class="nav-icon">⊞</span> Dashboard</a>
+      <a href="submit.html" class="nav-item active"><span class="nav-icon">↑</span> Submit Achievement</a>
+      <a href="rewards.html" class="nav-item"><span class="nav-icon">🏆</span> Rewards</a>
+      <a href="ranking.html" class="nav-item"><span class="nav-icon">📊</span> Rankings</a>
+      <a href="guidelines.html" class="nav-item"><span class="nav-icon">📋</span> Guidelines</a>
+      <a href="settings.html" class="nav-item"><span class="nav-icon">⚙️</span> Settings</a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="dark-mode-row">
+        <span class="dark-mode-label">
+          <span id="themeIcon">🌙</span> Dark Mode
+        </span>
+        <label class="toggle-switch">
+          <input type="checkbox" id="darkModeToggle"/>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="user-info">
+        <div class="user-avatar" id="userAvatar">S</div>
+        <div>
+          <p class="user-name" id="userName">—</p>
+          <p class="user-id" id="userStudentId">—</p>
+        </div>
+      </div>
+      <button class="btn-logout" id="logoutBtn">Logout</button>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <header class="page-header">
+      <div>
+        <h2 class="page-title">Submit Achievement</h2>
+        <p class="page-sub">Upload proof and earn merit points</p>
+      </div>
+    </header>
+
+    <!-- INFO NOTICE -->
+    <div class="submit-notice">
+      <span>ℹ️</span>
+      <p><strong>Punctual Pass</strong> (Attendance) and <strong>Scholar Track</strong> (Academic) are awarded automatically by your coordinator. No need to submit these here.</p>
+    </div>
+
+    <div class="form-card">
+      <form id="submitForm">
+
+        <div class="form-group">
+          <label>Achievement Title</label>
+          <input type="text" id="achTitle" placeholder="e.g. Dean's Lister — 1st Semester" required/>
+        </div>
+
+        <div class="form-group">
+          <label>Category</label>
+          <select id="achCategory" required>
+            <option value="" disabled selected>Select a category...</option>
+            <option value="1">🏅 Achievers Mark — Contest/Competition Points</option>
+            <option value="2">🤝 Engage Badge — Participation Points</option>
+            <option value="3">🔍 Lost &amp; Found — Certificate</option>
+          </select>
+          <small class="field-note" id="categoryNote"></small>
+        </div>
+
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="achDesc" rows="3" placeholder="Briefly describe your achievement..."></textarea>
+        </div>
+
+        <!-- Upload proof — required for all -->
+        <div class="form-group" id="proofGroup">
+          <label>Upload Proof <span class="required-tag">Required</span></label>
+          <div class="upload-zone" id="uploadZone">
+            <div class="upload-icon">📎</div>
+            <p>Drag & drop or <span class="upload-link">browse file</span></p>
+            <small>JPG, PNG, PDF — max 5MB</small>
+            <input type="file" id="proofFile" accept=".jpg,.jpeg,.png,.pdf" hidden/>
+          </div>
+          <div class="upload-preview" id="uploadPreview"></div>
+        </div>
+
+        <!-- PIN field — only shows when Lost & Found is selected -->
+        <div class="form-group" id="pinGroup" style="display:none;">
+          <label>Lost &amp; Found PIN Code <span class="required-tag">Required</span></label>
+          <input type="text" id="achPin" placeholder="e.g. MO2T3MKU" maxlength="8" style="text-transform:uppercase;"/>
+          <small style="color:#888;">Insert the PIN given by the guard.</small>
+        </div>
+
+        <div class="form-error" id="submitError"></div>
+        <div class="form-success" id="submitSuccess"></div>
+
+        <button type="submit" class="btn-primary" id="submitBtn">
+          Submit for Review →
+        </button>
+
+      </form>
+    </div>
+  </main>
+
+  <style>
+    .submit-notice {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: rgba(59,130,246,0.07);
+      border: 1.5px solid rgba(59,130,246,0.18);
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      margin-bottom: 20px;
+      font-size: 13px;
+      color: var(--slate);
+      line-height: 1.5;
+    }
+    .submit-notice span { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+    .submit-notice p { margin: 0; }
+
+    .required-tag {
+      font-size: 10px;
+      font-weight: 700;
+      background: rgba(242,101,34,0.1);
+      color: var(--orange);
+      padding: 2px 7px;
+      border-radius: 99px;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+
+    .field-note {
+      display: block;
+      margin-top: 5px;
+      font-size: 12px;
+      color: var(--gray);
+      line-height: 1.4;
+    }
+  </style>
+
+  <script src="api.js"></script>
+  <script src="auth.js"></script>
+  <script src="submit.js"></script>
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('stars_theme');
+      const toggle = document.getElementById('darkModeToggle');
+      const icon   = document.getElementById('themeIcon');
+      if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        if (toggle) toggle.checked = true;
+        if (icon)   icon.textContent = '☀️';
+      }
+      if (toggle) {
+        toggle.addEventListener('change', () => {
+          if (toggle.checked) {
+            document.body.classList.add('dark-mode');
+            localStorage.setItem('stars_theme', 'dark');
+            if (icon) icon.textContent = '☀️';
+          } else {
+            document.body.classList.remove('dark-mode');
+            localStorage.setItem('stars_theme', 'light');
+            if (icon) icon.textContent = '🌙';
+          }
+        });
+      }
+    })();
+
+    // Hamburger menu
+    (function() {
+      const btn     = document.getElementById('hamburgerBtn');
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+
+      function openSidebar() {
+        sidebar.classList.add('open');
+        overlay.classList.add('active');
+        btn.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeSidebar() {
+        sidebar.classList.remove('open');
+        overlay.classList.remove('active');
+        btn.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+
+      btn.addEventListener('click', openSidebar);
+      overlay.addEventListener('click', closeSidebar);
+      document.querySelectorAll('.nav-item').forEach(link => {
+        link.addEventListener('click', closeSidebar);
+      }); 
+    })();
+  </script>
+</body>
+</html>

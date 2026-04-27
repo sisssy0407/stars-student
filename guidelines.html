@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>STARS — Guidelines</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="dashboard.css"/>
+  <link rel="stylesheet" href="guidelines.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+</head>
+<body class="app-page">
+
+  <!-- HAMBURGER BUTTON -->
+  <button class="hamburger-btn" id="hamburgerBtn" aria-label="Open menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <!-- OVERLAY -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <span class="brand-star">★</span>
+      <span>STARS</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item">
+        <span class="nav-icon">⊞</span> Dashboard
+      </a>
+      <a href="submit.html" class="nav-item">
+        <span class="nav-icon">↑</span> Submit Achievement
+      </a>
+      <a href="rewards.html" class="nav-item">
+        <span class="nav-icon">🏆</span> Rewards
+      </a>
+      <a href="ranking.html" class="nav-item">
+        <span class="nav-icon">📊</span> Rankings
+      </a>
+      <a href="guidelines.html" class="nav-item active">
+        <span class="nav-icon">📋</span> Guidelines
+      </a>
+      <a href="settings.html" class="nav-item">
+        <span class="nav-icon">⚙️</span> Settings
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="dark-mode-row">
+        <span class="dark-mode-label">
+          <span id="themeIcon">🌙</span> Dark Mode
+        </span>
+        <label class="toggle-switch">
+          <input type="checkbox" id="darkModeToggle"/>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="user-info" id="sidebarUser">
+        <div class="user-avatar" id="userAvatar">S</div>
+        <div>
+          <p class="user-name" id="userName">Loading...</p>
+          <p class="user-id" id="userStudentId">—</p>
+        </div>
+      </div>
+      <button class="btn-logout" id="logoutBtn">Logout</button>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+    <header class="page-header">
+      <div>
+        <h2 class="page-title">Guidelines & Rules</h2>
+        <p class="page-sub">How to use STARS and earn merit points</p>
+      </div>
+    </header>
+
+    <!-- HOW TO USE THE WEBSITE -->
+    <div class="section-block guide-section">
+      <h3>📘 How to Use the STARS Website</h3>
+      <div class="steps-list">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <p class="step-title">Register your account</p>
+            <p class="step-desc">Go to the login page and click <strong>Register</strong>. Enter your full name, Student ID (format: YYYY-XXXXX), and create a password. You only need to do this once.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <p class="step-title">Log in to your account</p>
+            <p class="step-desc">Use your Student ID and password to sign in. You will be redirected to your Dashboard automatically.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <p class="step-title">Check your Dashboard</p>
+            <p class="step-desc">Your Dashboard shows your <strong>Total Merit Points</strong> and your points per category: Scholar Track, Punctual Pass, Achievers Mark, and Engage Badge.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <p class="step-title">Submit an Achievement</p>
+            <p class="step-desc">Click <strong>Submit Achievement</strong> on the sidebar. Fill in the title, pick a category, add a short description, and upload your proof (certificate, photo, or PDF — max 5MB). Then click <em>Submit for Review</em>.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <p class="step-title">Wait for Admin Approval</p>
+            <p class="step-desc">Your submission will show as <span class="status-badge status-pending">Pending</span> while it is being reviewed. The admin will approve or reject it. Points are only added after approval.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">6</div>
+          <div class="step-body">
+            <p class="step-title">Redeem your Rewards</p>
+            <p class="step-desc">Once you have enough points, go to <strong>Rewards</strong> and click <em>Redeem Now</em> on any unlocked reward. Show the confirmation to your CCS coordinator to claim it.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CATEGORIES & POINTS -->
+    <div class="section-block guide-section">
+      <h3>⭐ Merit Point Categories</h3>
+      <p class="guide-intro">There are 5 categories where you can earn points. Each category has a dedicated badge on your Dashboard.</p>
+
+      <div class="category-cards">
+
+        <div class="cat-card scholar">
+          <div class="cat-header">
+            <span class="cat-icon">📚</span>
+            <div>
+              <p class="cat-name">Scholar Track</p>
+              <span class="category-badge scholar">Academic</span>
+            </div>
+          </div>
+          <table class="points-table">
+            <thead><tr><th>Achievement</th><th>Points</th></tr></thead>
+            <tbody>
+              <tr><td>Dean's Lister — Top 1</td><td><strong>20 pts</strong></td></tr>
+              <tr><td>Dean's Lister — Top 2–5</td><td><strong>15 pts</strong></td></tr>
+              <tr><td>Dean's Lister — Top 6–10</td><td><strong>10 pts</strong></td></tr>
+              <tr><td>Dean's Lister — Below Top 10</td><td><strong>5 pts</strong></td></tr>
+              <tr><td>Perfect Score (Exam)</td><td><strong>5 pts</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="cat-card punctual">
+          <div class="cat-header">
+            <span class="cat-icon">⏰</span>
+            <div>
+              <p class="cat-name">Punctual Pass</p>
+              <span class="category-badge punctual">Attendance</span>
+            </div>
+          </div>
+          <table class="points-table">
+            <thead><tr><th>Achievement</th><th>Points</th></tr></thead>
+            <tbody>
+              <tr><td>Perfect Attendance per Semester(100%)</td><td><strong>20 pts</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="cat-card achiever">
+          <div class="cat-header">
+            <span class="cat-icon">🏆</span>
+            <div>
+              <p class="cat-name">Achievers Mark</p>
+              <span class="category-badge achiever">Contests</span>
+            </div>
+          </div>
+          <table class="points-table">
+            <thead><tr><th>Achievement</th><th>Points</th></tr></thead>
+            <tbody>
+              <tr><td>1st Place — National</td><td><strong>30 pts</strong></td></tr>
+              <tr><td>2nd Place — National</td><td><strong>20 pts</strong></td></tr>
+              <tr><td>3rd Place — National</td><td><strong>15 pts</strong></td></tr>
+              <tr><td>1st Place — School Level</td><td><strong>15 pts</strong></td></tr>
+              <tr><td>2nd Place — School Level</td><td><strong>10 pts</strong></td></tr>
+              <tr><td>3rd Place — School Level</td><td><strong>7 pts</strong></td></tr>
+              <tr><td>Participant Only</td><td><strong>2 pts</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="cat-card engage">
+          <div class="cat-header">
+            <span class="cat-icon">🤝</span>
+            <div>
+              <p class="cat-name">Engage Badge</p>
+              <span class="category-badge engage">Participation</span>
+            </div>
+          </div>
+          <table class="points-table">
+            <thead><tr><th>Achievement</th><th>Points</th></tr></thead>
+            <tbody>
+              <tr><td>Event Organizer / Committee Head</td><td><strong>8 pts</strong></td></tr>
+              <tr><td>Committee Member / Volunteer</td><td><strong>4 pts</strong></td></tr>
+              <tr><td>Joined School Event</td><td><strong>2 pts</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="cat-card general">
+          <div class="cat-header">
+            <span class="cat-icon">🔍</span>
+            <div>
+              <p class="cat-name">General</p>
+              <span class="category-badge" style="background:rgba(138,138,154,0.15);color:var(--gray);">Other</span>
+            </div>
+          </div>
+          <table class="points-table">
+            <thead><tr><th>Achievement</th><th>Points</th></tr></thead>
+            <tbody>
+              <tr><td>Lost &amp; Found (with PIN)</td><td><strong>15 pts</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- REWARDS THRESHOLDS -->
+    <div class="section-block guide-section">
+      <h3>🎁 Rewards You Can Earn</h3>
+      <p class="guide-intro">Save up your merit points to redeem the following rewards at the CCS office. Rewards are updated by the admin.</p>
+      <div class="rewards-threshold-list" id="guideRewardsList">
+        <div class="loading-row">Loading rewards...</div>
+      </div>
+    </div>
+
+    <!-- RULES -->
+    <div class="section-block guide-section">
+      <h3>📌 Important Rules</h3>
+      <ul class="rules-list">
+        <li>✅ Submit only <strong>legitimate</strong> achievements with valid proof.</li>
+        <li>✅ One submission per achievement only — no duplicate submissions.</li>
+        <li>✅ Proof must be clear and readable (JPG, PNG, or PDF, max 5MB).</li>
+        <li>✅ Points are only credited after admin <strong>approval</strong>.</li>
+        <li>✅ Lost &amp; Found PIN codes can only be used <strong>once</strong>.</li>
+        <li>❌ Do <strong>not</strong> submit fake or edited certificates — this will result in disqualification.</li>
+        <li>❌ Redeemed rewards cannot be refunded or exchanged.</li>
+        <li>❌ Account sharing is <strong>not allowed</strong>.</li>
+      </ul>
+    </div>
+
+  </main>
+
+  <script src="api.js"></script>
+  <script src="auth.js"></script>
+  <script src="guidelines.js"></script>
+  <script>
+    // Load rewards dynamically from API
+    (async function() {
+      const list = document.getElementById('guideRewardsList');
+      const rwData = await api.getRewards();
+      if (rwData && rwData.success && rwData.rewards.length > 0) {
+        list.innerHTML = rwData.rewards.map(r => `
+          <div class="threshold-item">
+            <div class="threshold-pts">${r.points_required} pts</div>
+            <div class="threshold-info">
+              <p class="threshold-name">${r.reward_name}</p>
+              <p class="threshold-desc">${r.description || ''}</p>
+            </div>
+          </div>
+        `).join('');
+      } else {
+        list.innerHTML = '<p style="color:var(--gray);padding:12px 0;">No rewards available at the moment.</p>';
+      }
+    })();
+  </script>
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('stars_theme');
+      const toggle = document.getElementById('darkModeToggle');
+      const icon   = document.getElementById('themeIcon');
+      if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        if (toggle) toggle.checked = true;
+        if (icon)   icon.textContent = '☀️';
+      }
+      if (toggle) {
+        toggle.addEventListener('change', () => {
+          if (toggle.checked) {
+            document.body.classList.add('dark-mode');
+            localStorage.setItem('stars_theme', 'dark');
+            if (icon) icon.textContent = '☀️';
+          } else {
+            document.body.classList.remove('dark-mode');
+            localStorage.setItem('stars_theme', 'light');
+            if (icon) icon.textContent = '🌙';
+          }
+        });
+      }
+    })();
+
+    // Hamburger menu
+    (function() {
+      const btn     = document.getElementById('hamburgerBtn');
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+
+      function openSidebar() {
+        sidebar.classList.add('open');
+        overlay.classList.add('active');
+        btn.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeSidebar() {
+        sidebar.classList.remove('open');
+        overlay.classList.remove('active');
+        btn.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+
+      btn.addEventListener('click', openSidebar);
+      overlay.addEventListener('click', closeSidebar);
+      document.querySelectorAll('.nav-item').forEach(link => {
+        link.addEventListener('click', closeSidebar);
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>STARS — Rankings</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="dashboard.css"/>
+  <link rel="stylesheet" href="guidelines.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    /* ── Year Filter Tabs ── */
+    .year-tabs {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+    .year-tab {
+      padding: 0.45rem 1.1rem;
+      border-radius: 999px;
+      border: 1.5px solid var(--border, #e5e7eb);
+      background: transparent;
+      color: var(--text, #111);
+      font-family: inherit;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .year-tab:hover {
+      border-color: var(--primary, #6366f1);
+      color: var(--primary, #6366f1);
+    }
+    .year-tab.active {
+      background: var(--primary, #6366f1);
+      border-color: var(--primary, #6366f1);
+      color: #fff;
+    }
+
+    /* ── Ranking Table ── */
+    .ranking-wrapper {
+      background: var(--card-bg, #fff);
+      border: 1px solid var(--border, #e5e7eb);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .ranking-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    .ranking-table th,
+    .ranking-table td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border, #e5e7eb);
+    }
+    .ranking-table th {
+      font-weight: 600;
+      color: var(--gray, #6b7280);
+      background: var(--card-bg, #f9fafb);
+    }
+    .ranking-table tr:last-child td {
+      border-bottom: none;
+    }
+    .ranking-table tr.me {
+      background: #eff6ff;
+    }
+
+    /* ── Rank Medal ── */
+    .rank-cell {
+      font-weight: 700;
+      font-size: 1rem;
+      width: 3rem;
+      text-align: center;
+    }
+    .rank-1 { color: #f59e0b; }
+    .rank-2 { color: #9ca3af; }
+    .rank-3 { color: #b45309; }
+
+    .empty-ranking {
+      padding: 1.5rem;
+      color: var(--gray, #6b7280);
+      font-size: 0.9rem;
+    }
+    .loading-ranking {
+      padding: 1.2rem;
+      color: var(--gray, #6b7280);
+      font-size: 0.9rem;
+    }
+
+    /* ── My Rank pill ── */
+    .my-rank-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--card-bg, #f9fafb);
+      border: 1.5px solid var(--border, #e5e7eb);
+      border-radius: 999px;
+      padding: 0.35rem 1rem;
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body class="app-page">
+
+  <!-- HAMBURGER BUTTON -->
+  <button class="hamburger-btn" id="hamburgerBtn" aria-label="Open menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <!-- OVERLAY -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand"><span class="brand-star">★</span><span>STARS</span></div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item"><span class="nav-icon">⊞</span> Dashboard</a>
+      <a href="submit.html" class="nav-item"><span class="nav-icon">↑</span> Submit Achievement</a>
+      <a href="rewards.html" class="nav-item"><span class="nav-icon">🏆</span> Rewards</a>
+      <a href="ranking.html" class="nav-item active"><span class="nav-icon">📊</span> Rankings</a>
+      <a href="guidelines.html" class="nav-item"><span class="nav-icon">📋</span> Guidelines</a>
+      <a href="settings.html" class="nav-item"><span class="nav-icon">⚙️</span> Settings</a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="dark-mode-row">
+        <span class="dark-mode-label">
+          <span id="themeIcon">🌙</span> Dark Mode
+        </span>
+        <label class="toggle-switch">
+          <input type="checkbox" id="darkModeToggle"/>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="user-info">
+        <div class="user-avatar" id="userAvatar">S</div>
+        <div>
+          <p class="user-name" id="userName">—</p>
+          <p class="user-id" id="userStudentId">—</p>
+        </div>
+      </div>
+      <button class="btn-logout" id="logoutBtn">Logout</button>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <header class="page-header">
+      <div>
+        <h2 class="page-title">Rankings</h2>
+        <p class="page-sub">Top 50 students by merit points</p>
+      </div>
+      <div id="myRankPill" class="my-rank-pill" style="display:none">
+        📍 Your Rank: <strong id="myRankDisplay">—</strong>
+      </div>
+    </header>
+
+    <!-- Year Filter Tabs -->
+    <div class="year-tabs">
+      <button class="year-tab active" data-year="">All Years</button>
+      <button class="year-tab" data-year="1">1st Year</button>
+      <button class="year-tab" data-year="2">2nd Year</button>
+      <button class="year-tab" data-year="3">3rd Year</button>
+      <button class="year-tab" data-year="4">4th Year</button>
+    </div>
+
+    <!-- Ranking Table -->
+    <div class="ranking-wrapper">
+      <div id="rankingContainer" class="loading-ranking">Loading rankings...</div>
+    </div>
+  </main>
+
+  <script src="api.js"></script>
+  <script src="auth.js"></script>
+  <script src="ranking.js"></script>
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('stars_theme');
+      const toggle = document.getElementById('darkModeToggle');
+      const icon   = document.getElementById('themeIcon');
+      if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        if (toggle) toggle.checked = true;
+        if (icon)   icon.textContent = '☀️';
+      }
+      if (toggle) {
+        toggle.addEventListener('change', () => {
+          if (toggle.checked) {
+            document.body.classList.add('dark-mode');
+            localStorage.setItem('stars_theme', 'dark');
+            if (icon) icon.textContent = '☀️';
+          } else {
+            document.body.classList.remove('dark-mode');
+            localStorage.setItem('stars_theme', 'light');
+            if (icon) icon.textContent = '🌙';
+          }
+        });
+      }
+    })();
+
+    // Hamburger menu
+    (function() {
+      const btn     = document.getElementById('hamburgerBtn');
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+
+      function openSidebar() {
+        sidebar.classList.add('open');
+        overlay.classList.add('active');
+        btn.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeSidebar() {
+        sidebar.classList.remove('open');
+        overlay.classList.remove('active');
+        btn.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+
+      btn.addEventListener('click', openSidebar);
+      overlay.addEventListener('click', closeSidebar);
+      document.querySelectorAll('.nav-item').forEach(link => {
+        link.addEventListener('click', closeSidebar);
+      });
+    })();
+  </script>
+</body>
+</html>

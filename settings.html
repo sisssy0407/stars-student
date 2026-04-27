@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>STARS — Settings</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="dashboard.css"/>
+  <link rel="stylesheet" href="guidelines.css"/>
+  <link rel="stylesheet" href="settings.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+</head>
+<body class="app-page">
+
+  <!-- HAMBURGER BUTTON -->
+  <button class="hamburger-btn" id="hamburgerBtn" aria-label="Open menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <!-- OVERLAY -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <span class="brand-star">★</span>
+      <span>STARS</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item"><span class="nav-icon">⊞</span> Dashboard</a>
+      <a href="submit.html" class="nav-item"><span class="nav-icon">↑</span> Submit Achievement</a>
+      <a href="rewards.html" class="nav-item"><span class="nav-icon">🏆</span> Rewards</a>
+      <a href="ranking.html" class="nav-item"><span class="nav-icon">📊</span> Rankings</a>
+      <a href="guidelines.html" class="nav-item"><span class="nav-icon">📋</span> Guidelines</a>
+      <a href="settings.html" class="nav-item active"><span class="nav-icon">⚙️</span> Settings</a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="dark-mode-row">
+        <span class="dark-mode-label">
+          <span id="themeIcon">🌙</span> Dark Mode
+        </span>
+        <label class="toggle-switch">
+          <input type="checkbox" id="darkModeToggle"/>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="user-info">
+        <div class="user-avatar" id="userAvatar">S</div>
+        <div>
+          <p class="user-name" id="userName">—</p>
+          <p class="user-id" id="userStudentId">—</p>
+        </div>
+      </div>
+      <button class="btn-logout" id="logoutBtn">Logout</button>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+    <header class="page-header">
+      <div>
+        <h2 class="page-title">Settings</h2>
+        <p class="page-sub">Manage your account and preferences</p>
+      </div>
+    </header>
+
+    <div class="settings-wrap">
+
+      <!-- PROFILE -->
+      <div class="section-block settings-section">
+        <div class="settings-section-title">
+          <span class="settings-icon">👤</span>
+          <h3>Profile</h3>
+        </div>
+        <div class="settings-field-group">
+          <div class="settings-field">
+            <label>Full Name</label>
+            <div class="settings-readonly" id="profileName">—</div>
+          </div>
+          <div class="settings-field">
+            <label>Student ID</label>
+            <div class="settings-readonly" id="profileStudentId">—</div>
+          </div>
+        </div>
+        <p class="settings-note">⚠️ Profile information cannot be changed. Contact your CCS admin for corrections.</p>
+      </div>
+
+      <!-- CHANGE PASSWORD -->
+      <div class="section-block settings-section">
+        <div class="settings-section-title">
+          <span class="settings-icon">🔒</span>
+          <h3>Security</h3>
+        </div>
+        <form id="changePasswordForm" class="settings-form">
+          <div class="form-group">
+            <label>Current Password</label>
+            <input type="password" id="currentPassword" placeholder="Enter current password"/>
+          </div>
+          <div class="form-group">
+            <label>New Password</label>
+            <input type="password" id="newPassword" placeholder="Enter new password"/>
+          </div>
+          <div class="form-group">
+            <label>Confirm New Password</label>
+            <input type="password" id="confirmPassword" placeholder="Re-enter new password"/>
+          </div>
+          <div class="form-error" id="passwordError"></div>
+          <div class="form-success" id="passwordSuccess"></div>
+          <button type="submit" class="btn-primary settings-btn" id="changePasswordBtn">
+            Update Password
+          </button>
+        </form>
+      </div>
+
+      <!-- APPEARANCE -->
+      <div class="section-block settings-section">
+        <div class="settings-section-title">
+          <span class="settings-icon">🎨</span>
+          <h3>Appearance</h3>
+        </div>
+        <div class="settings-toggle-row">
+          <div>
+            <p class="settings-toggle-label">Dark Mode</p>
+            <p class="settings-toggle-desc">Switch between light and dark theme</p>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="darkModeToggle2"/>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- ABOUT -->
+      <div class="section-block settings-section">
+        <div class="settings-section-title">
+          <span class="settings-icon">ℹ️</span>
+          <h3>About</h3>
+        </div>
+        <div class="settings-about-list">
+          <div class="settings-about-row">
+            <span class="about-label">App Name</span>
+            <span class="about-value">STARS</span>
+          </div>
+          <div class="settings-about-row">
+            <span class="about-label">Full Name</span>
+            <span class="about-value">Student Tracking & Rewards System</span>
+          </div>
+          <div class="settings-about-row">
+            <span class="about-label">Version</span>
+            <span class="about-value">1.0.0</span>
+          </div>
+          <div class="settings-about-row">
+            <span class="about-label">Department</span>
+            <span class="about-value">College of Computer Studies (CCS)</span>
+          </div>
+          <div class="settings-about-row">
+            <span class="about-label">Contact Admin</span>
+            <span class="about-value"><a href="mailto:ccs@school.edu.ph" class="btn-link">ccs@school.edu.ph</a></span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="api.js"></script>
+  <script src="auth.js"></script>
+  <script>
+    // Dark mode init
+    (function() {
+      const savedTheme = localStorage.getItem('stars_theme');
+      const toggle  = document.getElementById('darkModeToggle');
+      const toggle2 = document.getElementById('darkModeToggle2');
+      const icon    = document.getElementById('themeIcon');
+
+      function applyTheme(dark) {
+        if (dark) {
+          document.body.classList.add('dark-mode');
+          localStorage.setItem('stars_theme', 'dark');
+          if (icon) icon.textContent = '☀️';
+          if (toggle)  toggle.checked  = true;
+          if (toggle2) toggle2.checked = true;
+        } else {
+          document.body.classList.remove('dark-mode');
+          localStorage.setItem('stars_theme', 'light');
+          if (icon) icon.textContent = '🌙';
+          if (toggle)  toggle.checked  = false;
+          if (toggle2) toggle2.checked = false;
+        }
+      }
+
+      if (savedTheme === 'dark') applyTheme(true);
+
+      if (toggle)  toggle.addEventListener('change',  () => applyTheme(toggle.checked));
+      if (toggle2) toggle2.addEventListener('change', () => applyTheme(toggle2.checked));
+    })();
+
+    // Load profile info
+    (function() {
+      const user = JSON.parse(localStorage.getItem('stars_user') || '{}');
+      const nameEl = document.getElementById('profileName');
+      const idEl   = document.getElementById('profileStudentId');
+      if (nameEl) nameEl.textContent = user.full_name  || '—';
+      if (idEl)   idEl.textContent   = user.student_id || '—';
+    })();
+
+    // Change password form
+    document.getElementById('changePasswordForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn        = document.getElementById('changePasswordBtn');
+      const errEl      = document.getElementById('passwordError');
+      const successEl  = document.getElementById('passwordSuccess');
+      const current    = document.getElementById('currentPassword').value;
+      const newPass    = document.getElementById('newPassword').value;
+      const confirmPass= document.getElementById('confirmPassword').value;
+
+      errEl.textContent     = '';
+      successEl.textContent = '';
+
+      if (!current || !newPass || !confirmPass) {
+        errEl.textContent = 'Please fill in all fields.';
+        return;
+      }
+      if (newPass.length < 6) {
+        errEl.textContent = 'New password must be at least 6 characters.';
+        return;
+      }
+      if (newPass !== confirmPass) {
+        errEl.textContent = 'New passwords do not match.';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Updating...';
+
+      const result = await api.changePassword(current, newPass);
+      if (result.success) {
+        successEl.textContent = '✓ Password updated successfully!';
+        document.getElementById('changePasswordForm').reset();
+      } else {
+        errEl.textContent = result.message || 'Failed to update password.';
+      }
+
+      btn.disabled = false;
+      btn.textContent = 'Update Password';
+    });
+
+    // Hamburger menu
+    (function() {
+      const btn     = document.getElementById('hamburgerBtn');
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+
+      function openSidebar() {
+        sidebar.classList.add('open');
+        overlay.classList.add('active');
+        btn.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeSidebar() {
+        sidebar.classList.remove('open');
+        overlay.classList.remove('active');
+        btn.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+
+      btn.addEventListener('click', openSidebar);
+      overlay.addEventListener('click', closeSidebar);
+      document.querySelectorAll('.nav-item').forEach(link => {
+        link.addEventListener('click', closeSidebar);
+      });
+    })();
+  </script>
+</body>
+</html>

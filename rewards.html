@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>STARS — Rewards</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="dashboard.css"/>
+  <link rel="stylesheet" href="guidelines.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    /* ── Redemption History ── */
+    .history-section {
+      margin-top: 2.5rem;
+    }
+    .history-section .section-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--text, #111);
+    }
+    .history-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    .history-table th,
+    .history-table td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border, #e5e7eb);
+    }
+    .history-table th {
+      font-weight: 600;
+      color: var(--gray, #6b7280);
+      background: var(--card-bg, #f9fafb);
+    }
+    .history-table tr:last-child td {
+      border-bottom: none;
+    }
+    .empty-history {
+      color: var(--gray, #6b7280);
+      font-size: 0.9rem;
+      padding: 1rem 0;
+    }
+    .status-badge {
+      display: inline-block;
+      padding: 0.25rem 0.65rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: capitalize;
+    }
+    .status-pending  { background: #fef9c3; color: #a16207; }
+    .status-approved { background: #dcfce7; color: #166534; }
+    .status-rejected { background: #fee2e2; color: #991b1b; }
+    .status-claimed  { background: #dbeafe; color: #1e40af; }
+
+    /* ── History wrapper card ── */
+    .history-wrapper {
+      background: var(--card-bg, #fff);
+      border: 1px solid var(--border, #e5e7eb);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .history-loading {
+      padding: 1.2rem;
+      color: var(--gray, #6b7280);
+      font-size: 0.9rem;
+    }
+
+    /* ── Stock Badge ── */
+    .stock-badge {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      margin-bottom: 0.5rem;
+    }
+    .stock-badge.in  { background: #dcfce7; color: #166534; }
+    .stock-badge.out { background: #fee2e2; color: #991b1b; }
+  </style>
+</head>
+<body class="app-page">
+
+  <!-- HAMBURGER BUTTON -->
+  <button class="hamburger-btn" id="hamburgerBtn" aria-label="Open menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <!-- OVERLAY -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand"><span class="brand-star">★</span><span>STARS</span></div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item"><span class="nav-icon">⊞</span> Dashboard</a>
+      <a href="submit.html" class="nav-item"><span class="nav-icon">↑</span> Submit Achievement</a>
+      <a href="rewards.html" class="nav-item active"><span class="nav-icon">🏆</span> Rewards</a>
+      <a href="ranking.html" class="nav-item"><span class="nav-icon">📊</span> Rankings</a>
+      <a href="guidelines.html" class="nav-item"><span class="nav-icon">📋</span> Guidelines</a>
+      <a href="settings.html" class="nav-item"><span class="nav-icon">⚙️</span> Settings</a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="dark-mode-row">
+        <span class="dark-mode-label">
+          <span id="themeIcon">🌙</span> Dark Mode
+        </span>
+        <label class="toggle-switch">
+          <input type="checkbox" id="darkModeToggle"/>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="user-info">
+        <div class="user-avatar" id="userAvatar">S</div>
+        <div>
+          <p class="user-name" id="userName">—</p>
+          <p class="user-id" id="userStudentId">—</p>
+        </div>
+      </div>
+      <button class="btn-logout" id="logoutBtn">Logout</button>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <header class="page-header">
+      <div>
+        <h2 class="page-title">Rewards Store</h2>
+        <p class="page-sub">Redeem your merit points for privileges and perks</p>
+      </div>
+      <div class="balance-pill">
+        <span>Balance: </span>
+        <strong id="balanceDisplay">— pts</strong>
+      </div>
+    </header>
+
+    <!-- Rewards Grid -->
+    <div class="rewards-full-grid" id="rewardsGrid">
+      <div class="loading-row">Loading rewards...</div>
+    </div>
+
+    <!-- Redemption History -->
+    <section class="history-section">
+      <h3 class="section-title">🕓 Redemption History</h3>
+      <div class="history-wrapper">
+        <div id="historyContainer" class="history-loading">Loading history...</div>
+      </div>
+    </section>
+
+    <!-- Confirm Redeem Modal -->
+    <div class="modal-overlay" id="redeemModal" style="display:none">
+      <div class="modal-box">
+        <h3>Confirm Redemption</h3>
+        <p id="modalText">Are you sure you want to redeem this reward?</p>
+        <div class="modal-actions">
+          <button class="btn-ghost" id="modalCancel">Cancel</button>
+          <button class="btn-primary" id="modalConfirm">Redeem Now</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="api.js"></script>
+  <script src="auth.js"></script>
+  <script src="rewards.js"></script>
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('stars_theme');
+      const toggle = document.getElementById('darkModeToggle');
+      const icon   = document.getElementById('themeIcon');
+      if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        if (toggle) toggle.checked = true;
+        if (icon)   icon.textContent = '☀️';
+      }
+      if (toggle) {
+        toggle.addEventListener('change', () => {
+          if (toggle.checked) {
+            document.body.classList.add('dark-mode');
+            localStorage.setItem('stars_theme', 'dark');
+            if (icon) icon.textContent = '☀️';
+          } else {
+            document.body.classList.remove('dark-mode');
+            localStorage.setItem('stars_theme', 'light');
+            if (icon) icon.textContent = '🌙';
+          }
+        });
+      }
+    })();
+
+    // Hamburger menu
+    (function() {
+      const btn     = document.getElementById('hamburgerBtn');
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+
+      function openSidebar() {
+        sidebar.classList.add('open');
+        overlay.classList.add('active');
+        btn.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeSidebar() {
+        sidebar.classList.remove('open');
+        overlay.classList.remove('active');
+        btn.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+
+      btn.addEventListener('click', openSidebar);
+      overlay.addEventListener('click', closeSidebar);
+      document.querySelectorAll('.nav-item').forEach(link => {
+        link.addEventListener('click', closeSidebar);
+      });
+    })();
+  </script>
+</body>
+</html>

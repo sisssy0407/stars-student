@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>STARS — Dashboard</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="dashboard.css"/>
+  <link rel="stylesheet" href="guidelines.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+</head>
+<body class="app-page">
+
+  <!-- HAMBURGER BUTTON (visible on mobile only) -->
+  <button class="hamburger-btn" id="hamburgerBtn" aria-label="Open menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <!-- OVERLAY (darkens background when sidebar is open on mobile) -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <span class="brand-star">★</span>
+      <span>STARS</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item active">
+        <span class="nav-icon">⊞</span> Dashboard
+      </a>
+      <a href="submit.html" class="nav-item">
+        <span class="nav-icon">↑</span> Submit Achievement
+      </a>
+      <a href="rewards.html" class="nav-item">
+        <span class="nav-icon">🏆</span> Rewards
+      </a>
+      <a href="ranking.html" class="nav-item">
+        <span class="nav-icon">📊</span> Rankings
+      </a>
+      <a href="guidelines.html" class="nav-item">
+        <span class="nav-icon">📋</span> Guidelines
+      </a>
+      <a href="settings.html" class="nav-item">
+        <span class="nav-icon">⚙️</span> Settings
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <!-- DARK MODE TOGGLE -->
+      <div class="dark-mode-row">
+        <span class="dark-mode-label">
+          <span id="themeIcon">🌙</span> Dark Mode
+        </span>
+        <label class="toggle-switch">
+          <input type="checkbox" id="darkModeToggle"/>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="user-info" id="sidebarUser">
+        <div class="user-avatar" id="userAvatar">S</div>
+        <div>
+          <p class="user-name" id="userName">Loading...</p>
+          <p class="user-id" id="userStudentId">—</p>
+        </div>
+      </div>
+      <button class="btn-logout" id="logoutBtn">Logout</button>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+    <header class="page-header">
+      <div>
+        <h2 class="page-title">Dashboard</h2>
+        <p class="page-sub" id="greetingText">Welcome back!</p>
+      </div>
+    </header>
+
+    <!-- POINTS OVERVIEW -->
+    <section class="points-overview">
+      <div class="points-card points-main">
+        <p class="points-label">Total Balance</p>
+        <h1 class="points-value" id="totalBalance">—</h1>
+        <p class="points-unit">merit points</p>
+      </div>
+      <div class="points-card">
+        <p class="points-label">Scholar Track</p>
+        <h2 class="points-value scholar" id="scholarPts">—</h2>
+        <span class="category-badge scholar">Academic</span>
+      </div>
+      <div class="points-card">
+        <p class="points-label">Punctual Pass</p>
+        <h2 class="points-value punctual" id="punctualPts">—</h2>
+        <span class="category-badge punctual">Attendance</span>
+      </div>
+      <div class="points-card">
+        <p class="points-label">Achievers Mark</p>
+        <h2 class="points-value achiever" id="achieverPts">—</h2>
+        <span class="category-badge achiever">Contests</span>
+      </div>
+      <div class="points-card">
+        <p class="points-label">Engage Badge</p>
+        <h2 class="points-value engage" id="engagePts">—</h2>
+        <span class="category-badge engage">Participation</span>
+      </div>
+      <!-- ✅ NEW: General Badge -->
+      <div class="points-card">
+        <p class="points-label">General</p>
+        <h2 class="points-value general" id="generalPts">—</h2>
+        <span class="category-badge general">Other</span>
+      </div>
+    </section>
+
+    <!-- MOTIVATION MILESTONES -->
+    <section class="section-block" id="motivationSection">
+      <div class="motivation-progress-banner">
+        <div class="mot-banner-icon">🎯</div>
+        <div class="mot-banner-text">
+          <p class="mot-banner-title" id="motBannerTitle">Loading your next reward...</p>
+          <p class="mot-banner-sub" id="motBannerSub"></p>
+          <div class="mot-progress-bar-wrap">
+            <div class="mot-progress-bar-fill" id="motProgressFill"></div>
+          </div>
+          <div class="mot-progress-labels">
+            <span id="motCurrentPts">0 pts</span>
+            <span id="motTargetPts">— pts</span>
+          </div>
+        </div>
+      </div>
+      <div class="section-header" style="margin-top:1.4rem; margin-bottom:12px;">
+        <h3 style="margin-bottom:0;">Rewards Milestones</h3>
+        <a href="rewards.html" class="btn-link">View All →</a>
+      </div>
+      <div class="milestones-grid" id="milestonesGrid"></div>
+    </section>
+
+    <!-- RECENT SUBMISSIONS -->
+    <section class="section-block">
+      <div class="section-header">
+        <h3>Recent Submissions</h3>
+        <a href="submit.html" class="btn-link">+ New Submission</a>
+      </div>
+      <div class="table-wrap">
+        <table class="data-table" id="submissionsTable">
+          <thead>
+            <tr>
+              <th>Achievement</th>
+              <th>Category</th>
+              <th>Points</th>
+              <th>Status</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody id="submissionsBody">
+            <tr><td colspan="5" class="loading-row">Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- REWARDS PREVIEW -->
+    <section class="section-block">
+      <div class="section-header">
+        <h3>Rewards You Can Claim</h3>
+        <a href="rewards.html" class="btn-link">View All →</a>
+      </div>
+      <div class="rewards-grid" id="rewardsPreview"></div>
+    </section>
+  </main>
+
+  <script src="api.js"></script>
+  <script src="auth.js"></script>
+  <script src="dashboard.js"></script>
+  <script>
+    // Dark mode init
+    (function() {
+      const savedTheme = localStorage.getItem('stars_theme');
+      const toggle = document.getElementById('darkModeToggle');
+      const icon   = document.getElementById('themeIcon');
+      if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        if (toggle) toggle.checked = true;
+        if (icon)   icon.textContent = '☀️';
+      }
+      if (toggle) {
+        toggle.addEventListener('change', () => {
+          if (toggle.checked) {
+            document.body.classList.add('dark-mode');
+            localStorage.setItem('stars_theme', 'dark');
+            if (icon) icon.textContent = '☀️';
+          } else {
+            document.body.classList.remove('dark-mode');
+            localStorage.setItem('stars_theme', 'light');
+            if (icon) icon.textContent = '🌙';
+          }
+        });
+      }
+    })();
+
+    // Hamburger menu
+    (function() {
+      const btn     = document.getElementById('hamburgerBtn');
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+
+      function openSidebar() {
+        sidebar.classList.add('open');
+        overlay.classList.add('active');
+        btn.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeSidebar() {
+        sidebar.classList.remove('open');
+        overlay.classList.remove('active');
+        btn.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+
+      btn.addEventListener('click', openSidebar);
+      overlay.addEventListener('click', closeSidebar);
+
+      document.querySelectorAll('.nav-item').forEach(link => {
+        link.addEventListener('click', closeSidebar);
+      });
+    })();
+  </script>
+</body>
+</html>
