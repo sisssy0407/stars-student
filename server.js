@@ -17,7 +17,7 @@ function md5(str) {
 }
 
 const app  = express();
-const PORT = 8081;
+const PORT = process.env.PORT || 8081;
 const JWT_SECRET = 'stars_secret_key_change_in_production';
 
 // ---- MIDDLEWARE ----
@@ -53,10 +53,11 @@ const upload = multer({
 
 // ---- DATABASE ----
 const db = mysql.createPool({
-  host:     'localhost',
-  user:     'root',       // <-- palitan ng iyong MySQL username
-  password: '',           // <-- palitan ng iyong MySQL password
-  database: 'stars_db',
+  host:     process.env.DB_HOST     || 'localhost',
+  user:     process.env.DB_USER     || 'root',
+  password: process.env.DB_PASSWORD || '',
+  database: process.env.DB_NAME     || 'stars_db',
+  port:     process.env.DB_PORT     || 3306,
   waitForConnections: true,
   connectionLimit: 10
 });
