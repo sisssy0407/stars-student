@@ -2,7 +2,7 @@
 // STARS — API (Node.js/Express Backend)
 // ============================================
 
-const API_BASE = 'http://localhost:8081/api';
+const API_BASE = 'https://stars-student.onrender.com/api';
 
 const api = {
 
