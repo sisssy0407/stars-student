@@ -27,6 +27,10 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(express.json());
+app.use(express.static('.'));
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/index.html');
+});
 app.use('/uploads', express.static('uploads'));
 
 // ---- FILE UPLOAD ----
