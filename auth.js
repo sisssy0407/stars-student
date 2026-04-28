@@ -16,7 +16,7 @@ if (loginForm) {
 
     const btn = document.getElementById('loginBtn');
     const errorEl = document.getElementById('loginError');
-    const studentId = document.getElementById('studentId').value.trim();
+    const email = document.getElementById('email').value.trim();
     const password  = document.getElementById('password').value;
 
     btn.disabled = true;
@@ -24,7 +24,7 @@ if (loginForm) {
     errorEl.innerHTML = '';
 
     try {
-      const data = await api.login(studentId, password);
+      const data = await api.login(email, password);
 
       if (data.success) {
         localStorage.setItem('stars_token', data.token);

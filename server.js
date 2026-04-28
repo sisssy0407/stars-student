@@ -85,14 +85,13 @@ function authMiddleware(req, res, next) {
 
 // ✅ POST /api/auth/login
 app.post('/api/auth/login', async (req, res) => {
-  const { studentId, password } = req.body;
-  if (!studentId || !password)
-    return res.status(400).json({ success: false, message: 'Student ID and password are required.' });
+  const { email, password } = req.body;
+  if (!email || !password)
+    return res.status(400).json({ success: false, message: 'Email and password are required.' });
 
   try {
     const [rows] = await db.query(
-      'SELECT * FROM students WHERE student_id = ?', [studentId]
-    );
+'SELECT * FROM students WHERE email = ?', [email]    );
     if (rows.length === 0)
       return res.status(401).json({ success: false, message: 'Invalid Student ID or password.' });
 
