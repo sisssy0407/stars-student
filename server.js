@@ -10,6 +10,15 @@ const cors       = require('cors');
 const multer     = require('multer');
 const path       = require('path');
 const fs         = require('fs');
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'stars.ccs.notify@gmail.com',
+    pass: 'uorlbhpzopunzhed'
+  }
+});
 
 // ✅ MD5 helper
 function md5(str) {
@@ -105,7 +114,19 @@ app.post('/api/auth/login', async (req, res) => {
       JWT_SECRET,
       { expiresIn: '8h' }
     );
-
+// ✅ Send login notification email
+transporter.sendMail({
+  from: 'STARS CCS <stars.ccs.notify@gmail.com>',
+  to: student.email,
+  subject: 'STARS — Login Notification',
+  html: `
+    <h2>Hello, ${student.full_name}!</h2>
+    <p>You have successfully logged in to <strong>STARS</strong>.</p>
+    <p>If this wasn't you, please contact your CCS admin immediately.</p>
+    <br/>
+    <p>— STARS CCS System</p>
+  `
+}).catch(err => console.error('Email error:', err));
     res.json({
       success:    true,
       token,                            // ✅ Real JWT token
