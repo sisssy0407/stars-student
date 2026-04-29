@@ -170,12 +170,12 @@ app.post('/api/auth/change-password', async (req, res) => {
 
     const student = rows[0];
 
-    if (md5(currentPassword) !== student.password)
+    if (currentPassword !== student.password)
       return res.status(401).json({ success: false, message: 'Current password is incorrect.' });
 
     await db.query(
       'UPDATE students SET password = ? WHERE student_id = ?',
-      [md5(newPassword), studentId]
+      [newPassword, studentId]
     );
 
     res.json({ success: true, message: 'Password updated successfully.' });
