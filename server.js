@@ -97,8 +97,7 @@ app.post('/api/auth/login', async (req, res) => {
 
     const student = rows[0];
 
-    const hashedInput = md5(password);
-    if (hashedInput !== student.password)
+    if (password !== student.password)
       return res.status(401).json({ success: false, message: 'Invalid Student ID or password.' });
 
     const token = jwt.sign(

@@ -22,6 +22,15 @@ if (loginForm) {
     btn.disabled = true;
     btn.textContent = 'Signing in...';
     errorEl.innerHTML = '';
+    errorEl.innerHTML = '';
+
+// ✅ VALIDATION — @gordoncollege.edu.ph only
+if (!email.endsWith('@gordoncollege.edu.ph')) {
+    errorEl.textContent = 'Use your Gordon College email (@gordoncollege.edu.ph) only.';
+    btn.disabled = false;
+    btn.textContent = 'Sign In →';
+    return;
+}
 
     try {
       const data = await api.login(email, password);
