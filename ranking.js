@@ -34,7 +34,7 @@ async function loadRanking(year) {
     return;
   }
 
-  consgit myStudentId = currentUser?.student_id || '';
+  const myStudentId = currentUser?.student_id || '';
 
   // Find current user's rank
   const myEntry = data.ranking.find(r => r.student_id === myStudentId);
