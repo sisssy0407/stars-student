@@ -37,9 +37,10 @@ async function loadRanking(year) {
   const myStudentId = currentUser?.student_id || '';
 
   // Find current user's rank
-  const myEntry = data.ranking.find(r => r.studentId === myStudentId);
-  if (myEntry) {
-    document.getElementById('myRankDisplay').textContent = `#${myEntry.rank}`;
+  const myEntry = data.ranking.find(r => r.student_id === myStudentId);
+if (myEntry) {
+  const myRank = data.ranking.indexOf(myEntry) + 1;
+  document.getElementById('myRankDisplay').textContent = `#${myRank}`;
     document.getElementById('myRankPill').style.display = 'inline-flex';
   } else {
     document.getElementById('myRankPill').style.display = 'none';
@@ -65,17 +66,18 @@ async function loadRanking(year) {
       </thead>
       <tbody>
         ${data.ranking.map(r => {
-          const isMe = r.studentId === myStudentId;
-          const rankClass = r.rank <= 3 ? `rank-${r.rank}` : '';
-          const yearLabel = r.yearLevel ? `${r.yearLevel}${ordinal(r.yearLevel)} Year` : '—';
-          return `
-            <tr class="${isMe ? 'me' : ''}">
-              <td class="rank-cell ${rankClass}">${rankIcon(r.rank)}</td>
-              <td>${escHtml(r.fullName)}${isMe ? ' <span style="font-size:0.75rem;color:var(--primary,#6366f1);font-weight:700">(You)</span>' : ''}</td>
-              <td style="color:var(--gray,#6b7280)">${escHtml(r.studentId)}</td>
-              <td>${yearLabel}</td>
-              <td><strong>${r.points}</strong> pts</td>
-            </tr>
+          const rank = data.ranking.indexOf(r) + 1;
+const isMe = r.student_id === myStudentId;
+const rankClass = rank <= 3 ? `rank-${rank}` : '';
+const yearLabel = r.year_level ? `${r.year_level}${ordinal(r.year_level)} Year` : '—';
+return `
+  <tr class="${isMe ? 'me' : ''}">
+    <td class="rank-cell ${rankClass}">${rankIcon(rank)}</td>
+    <td>${escHtml(r.full_name)}${isMe ? ' <span style="font-size:0.75rem;color:var(--primary,#6366f1);font-weight:700">(You)</span>' : ''}</td>
+    <td style="color:var(--gray,#6b7280)">${escHtml(r.student_id)}</td>
+    <td>${yearLabel}</td>
+    <td><strong>${r.total_points}</strong> pts</td>
+  </tr>
           `;
         }).join('')}
       </tbody>
