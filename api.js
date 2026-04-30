@@ -210,18 +210,19 @@ async login(email, password) {
 
   // ── Rankings ──
   async getRanking(year) {
-    try {
-      const url = year
-        ? `${API_BASE}/ranking?year=${year}`
-        : `${API_BASE}/ranking`;
-      const res  = await fetch(url, { headers: this._auth() });
-      const data = await res.json();
-      const list = Array.isArray(data) ? data : [];
-      return { success: true, ranking: list };
-    } catch {
-      return { success: false, ranking: [] };
-    }
-  },
+  try {
+    const url = year
+      ? `${API_BASE}/ranking?year=${year}`
+      : `${API_BASE}/ranking`;
+    const res  = await fetch(url, { headers: this._auth() });
+    const data = await res.json();
+    const list = Array.isArray(data) ? data : 
+                 Array.isArray(data.ranking) ? data.ranking : [];
+    return { success: true, ranking: list };
+  } catch {
+    return { success: false, ranking: [] };
+  }
+},
 
   _auth() {
     return { 'Authorization': `Bearer ${localStorage.getItem('stars_token')}` };
