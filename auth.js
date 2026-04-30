@@ -17,23 +17,31 @@ if (loginForm) {
     const btn = document.getElementById('loginBtn');
     const errorEl = document.getElementById('loginError');
     const email = document.getElementById('email').value.trim();
-    const password  = document.getElementById('password').value;
+    const password = document.getElementById('password').value;
 
     btn.disabled = true;
     btn.textContent = 'Signing in...';
     errorEl.innerHTML = '';
-    errorEl.innerHTML = '';
 
-// ✅ VALIDATION — @gordoncollege.edu.ph only
-if (!email.endsWith('@gordoncollege.edu.ph')) {
-    errorEl.textContent = 'Use your Gordon College email (@gordoncollege.edu.ph) only.';
-    btn.disabled = false;
-    btn.textContent = 'Sign In →';
-    return;
-}
+    // ✅ VALIDATION — @gordoncollege.edu.ph only
+    if (!email.endsWith('@gordoncollege.edu.ph')) {
+      errorEl.textContent = 'Use your Gordon College email (@gordoncollege.edu.ph) only.';
+      btn.disabled = false;
+      btn.textContent = 'Sign In →';
+      return;
+    }
 
     try {
       const data = await api.login(email, password);
+
+      // ✅ Email verification required
+      if (data.success && data.requiresVerification) {
+        errorEl.style.color = '#f26522';
+        errorEl.innerHTML = '📧 Check your email and click <strong>"Yes, This Is Me"</strong> to continue!';
+        btn.disabled = false;
+        btn.textContent = 'Sign In →';
+        return;
+      }
 
       if (data.success) {
         localStorage.setItem('stars_token', data.token);
@@ -41,22 +49,22 @@ if (!email.endsWith('@gordoncollege.edu.ph')) {
         window.location.href = 'dashboard.html';
       } else {
         if (data.message === 'Cannot connect to server.') {
-  errorEl.innerHTML =
-    '&#9888;&#65039; Cannot connect to server.<br>' +
-    '<small style="color:var(--gray);line-height:1.8">' +
-    'Make sure your backend is running on <strong>port 8081</strong>.<br>' +
-'Make sure your <strong>Spring Boot backend</strong> is running in NetBeans.' +
-    '</small>';
+          errorEl.innerHTML =
+            '&#9888;&#65039; Cannot connect to server.<br>' +
+            '<small style="color:var(--gray);line-height:1.8">' +
+            'Make sure your backend is running on <strong>port 8081</strong>.<br>' +
+            'Make sure your <strong>Spring Boot backend</strong> is running in NetBeans.' +
+            '</small>';
         } else {
           errorEl.textContent = data.message || 'Invalid credentials.';
         }
         btn.disabled = false;
-        btn.textContent = 'Sign In';
+        btn.textContent = 'Sign In →';
       }
     } catch (err) {
       errorEl.textContent = 'Connection error. Please try again.';
       btn.disabled = false;
-      btn.textContent = 'Sign In';
+      btn.textContent = 'Sign In →';
     }
   });
 }

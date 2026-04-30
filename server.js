@@ -99,47 +99,119 @@ app.post('/api/auth/login', async (req, res) => {
     return res.status(400).json({ success: false, message: 'Email and password are required.' });
 
   try {
-    const [rows] = await db.query(
-'SELECT * FROM students WHERE email = ?', [email]    );
+    const [rows] = await db.query('SELECT * FROM students WHERE email = ?', [email]);
     if (rows.length === 0)
-      return res.status(401).json({ success: false, message: 'Invalid Student ID or password.' });
+      return res.status(401).json({ success: false, message: 'Invalid email or password.' });
 
     const student = rows[0];
 
     if (password !== student.password)
-      return res.status(401).json({ success: false, message: 'Invalid Student ID or password.' });
+      return res.status(401).json({ success: false, message: 'Invalid email or password.' });
 
-    const token = jwt.sign(
+    // ✅ Generate login verification token
+    const loginToken = crypto.randomBytes(32).toString('hex');
+    const expires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+
+    await db.query(
+      'UPDATE students SET login_token=?, token_expires=? WHERE student_id=?',
+      [loginToken, expires, student.student_id]
+    );
+
+    // ✅ Send verification email
+    const verifyUrl = `https://stars-student.onrender.com/api/auth/verify-login?token=${loginToken}`;
+    transporter.sendMail({
+      from: 'STARS CCS <stars.ccs.notify@gmail.com>',
+      to: student.email,
+      subject: 'STARS — Confirm Your Login',
+      html: `
+        <div style="font-family: sans-serif; max-width: 500px; margin: auto; padding: 32px; border-radius: 12px; border: 1px solid #eee;">
+          <h2 style="color: #f26522;">★ STARS Login Verification</h2>
+          <p>Hello, <strong>${student.full_name}</strong>!</p>
+          <p>Someone is trying to log in to your STARS account.</p>
+          <p>If this is you, click the button below to continue:</p>
+          <a href="${verifyUrl}" style="
+            display: inline-block;
+            background: #f26522;
+            color: white;
+            padding: 12px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+            margin: 16px 0;
+          ">✅ Yes, This Is Me</a>
+          <p style="color: #666;">If you did <strong>NOT</strong> try to log in, ignore this email and contact your CCS admin immediately.</p>
+          <p style="color: #aaa; font-size: 12px;">⏱ This link expires in 10 minutes.</p>
+          <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;"/>
+          <p style="color: #aaa; font-size: 12px;">— STARS CCS System | College of Computer Studies</p>
+        </div>
+      `
+    }).catch(err => console.error('Email error:', err));
+
+    res.json({ success: true, requiresVerification: true, message: 'Check your email and click "Yes, This Is Me" to continue!' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Server error.' });
+  }
+});
+
+// ✅ GET /api/auth/verify-login
+app.get('/api/auth/verify-login', async (req, res) => {
+  const { token } = req.query;
+  try {
+    const [rows] = await db.query(
+      'SELECT * FROM students WHERE login_token=? AND token_expires > NOW()',
+      [token]
+    );
+    if (rows.length === 0)
+      return res.send(`
+        <html>
+          <body style="font-family: sans-serif; text-align: center; padding: 60px;">
+            <h2 style="color: #ef4444;">❌ Invalid or Expired Link</h2>
+            <p>Please try logging in again.</p>
+            <a href="https://stars-student.onrender.com" style="color: #f26522;">Go to Login</a>
+          </body>
+        </html>
+      `);
+
+    const student = rows[0];
+
+    // ✅ Clear token after use
+    await db.query(
+      'UPDATE students SET login_token=NULL, token_expires=NULL WHERE student_id=?',
+      [student.student_id]
+    );
+
+    const jwtToken = jwt.sign(
       { id: student.id, student_id: student.student_id },
       JWT_SECRET,
       { expiresIn: '8h' }
     );
-// ✅ Send login notification email
-transporter.sendMail({
-  from: 'STARS CCS <stars.ccs.notify@gmail.com>',
-  to: student.email,
-  subject: 'STARS — Login Notification',
-  html: `
-    <h2>Hello, ${student.full_name}!</h2>
-    <p>You have successfully logged in to <strong>STARS</strong>.</p>
-    <p>If this wasn't you, please contact your CCS admin immediately.</p>
-    <br/>
-    <p>— STARS CCS System</p>
-  `
-}).catch(err => console.error('Email error:', err));
-    res.json({
-      success:    true,
-      token,                            // ✅ Real JWT token
-      fullName:   student.full_name,
-      studentId:  student.student_id,
-      email:      student.email      || '',
-      program:    student.program    || '',
-      block:      student.block      || '',
-      yearLevel:  student.year_level || ''
-    });
+
+    // ✅ Redirect to dashboard with token
+    res.send(`
+      <html>
+        <body style="font-family: sans-serif; text-align: center; padding: 60px;">
+          <h2 style="color: #f26522;">✅ Verified! Redirecting...</h2>
+          <p>Please wait...</p>
+          <script>
+            localStorage.setItem('stars_token', '${jwtToken}');
+            localStorage.setItem('stars_user', JSON.stringify({
+              full_name:  '${student.full_name.replace(/'/g, "\\'")}',
+              student_id: '${student.student_id}',
+              email:      '${student.email}',
+              program:    '${student.program || ''}',
+              block:      '${student.block || ''}',
+              year_level: '${student.year_level || ''}'
+            }));
+            window.location.href = 'https://stars-student.onrender.com/dashboard.html';
+          </script>
+        </body>
+      </html>
+    `);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ success: false, message: 'Server error.' });
+    res.send(`<h2>❌ Server error. Please try again.</h2>`);
   }
 });
 
@@ -163,12 +235,10 @@ app.post('/api/students/register', async (req, res) => {
     if (existingEmail.length > 0)
       return res.status(400).json({ success: false, message: 'Email already registered.' });
 
-    const hashedPassword = md5(password);
-
     await db.query(
       `INSERT INTO students (student_id, full_name, email, program, block, year_level, password)
        VALUES (?, ?, ?, ?, ?, ?, ?)`,
-      [studentId, fullName, email, program || '', block || '', yearLevel || '', hashedPassword]
+      [studentId, fullName, email, program || '', block || '', yearLevel || '', password]
     );
 
     res.json({ success: true, message: 'Registration successful!' });
@@ -206,7 +276,7 @@ app.post('/api/auth/change-password', async (req, res) => {
   }
 });
 
-// ✅ GET /api/points/:student_id — FIX: consistent response format
+// ✅ GET /api/points/:student_id
 app.get('/api/points/:student_id', authMiddleware, async (req, res) => {
   try {
     const [categories] = await db.query(
@@ -230,8 +300,8 @@ app.get('/api/points/:student_id', authMiddleware, async (req, res) => {
 
     res.json({
       success:    true,
-      total:      totRows[0].total,   // ✅ api.js reads data.total
-      categories                      // ✅ api.js reads data.categories
+      total:      totRows[0].total,
+      categories
     });
   } catch (err) {
     console.error(err);
@@ -239,7 +309,7 @@ app.get('/api/points/:student_id', authMiddleware, async (req, res) => {
   }
 });
 
-// ✅ GET /api/submissions/:student_id — FIX: wrap in { success, submissions }
+// ✅ GET /api/submissions/:student_id
 app.get('/api/submissions/:student_id', authMiddleware, async (req, res) => {
   try {
     const [rows] = await db.query(
@@ -251,8 +321,6 @@ app.get('/api/submissions/:student_id', authMiddleware, async (req, res) => {
        ORDER BY s.submitted_at DESC`,
       [req.params.student_id]
     );
-
-    // ✅ FIX: Return wrapped object so dashboard.js can read subData.success + subData.submissions
     res.json({ success: true, submissions: rows });
   } catch (err) {
     console.error(err);
@@ -269,7 +337,6 @@ app.post('/api/submissions', authMiddleware, upload.single('proof'), async (req,
     return res.status(400).json({ success: false, message: 'Missing required fields.' });
 
   try {
-    // ---- PIN VALIDATION (Lost & Found category only) ----
     if (parseInt(category_id) === 6) {
       if (!pin_code || pin_code.trim() === '') {
         return res.status(400).json({ success: false, message: 'PIN code is required for Lost & Found.' });
@@ -295,7 +362,6 @@ app.post('/api/submissions', authMiddleware, upload.single('proof'), async (req,
       );
     }
 
-    // ---- INSERT SUBMISSION ----
     const proof_path = req.file ? req.file.filename : null;
     await db.query(
       `INSERT INTO submissions
@@ -310,7 +376,7 @@ app.post('/api/submissions', authMiddleware, upload.single('proof'), async (req,
   }
 });
 
-// ✅ GET /api/rewards — FIX: wrap in { success, rewards } for consistency
+// ✅ GET /api/rewards
 app.get('/api/rewards', authMiddleware, async (req, res) => {
   try {
     const [rows] = await db.query(
