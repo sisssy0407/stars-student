@@ -10,20 +10,6 @@ const cors       = require('cors');
 const multer     = require('multer');
 const path       = require('path');
 const fs         = require('fs');
-const nodemailer = require('nodemailer');
-
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: 'stars.ccs.notify@gmail.com',
-    pass: 'uorlbhpzopunzhed'
-  }
-});
-
-// ✅ MD5 helper
-function md5(str) {
-  return crypto.createHash('md5').update(str).digest('hex');
-}
 
 const app  = express();
 const PORT = process.env.PORT || 8081;
@@ -55,7 +41,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({
   storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
+  limits: { fileSize: 5 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     const allowed = ['.jpg', '.jpeg', '.png', '.pdf'];
     const ext = path.extname(file.originalname).toLowerCase();
@@ -108,110 +94,25 @@ app.post('/api/auth/login', async (req, res) => {
     if (password !== student.password)
       return res.status(401).json({ success: false, message: 'Invalid email or password.' });
 
-    // ✅ Generate login verification token
-    const loginToken = crypto.randomBytes(32).toString('hex');
-    const expires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
-
-    await db.query(
-      'UPDATE students SET login_token=?, token_expires=? WHERE student_id=?',
-      [loginToken, expires, student.student_id]
-    );
-
-    // ✅ Send verification email
-    const verifyUrl = `https://stars-student.onrender.com/api/auth/verify-login?token=${loginToken}`;
-    transporter.sendMail({
-      from: 'STARS CCS <stars.ccs.notify@gmail.com>',
-      to: student.email,
-      subject: 'STARS — Confirm Your Login',
-      html: `
-        <div style="font-family: sans-serif; max-width: 500px; margin: auto; padding: 32px; border-radius: 12px; border: 1px solid #eee;">
-          <h2 style="color: #f26522;">★ STARS Login Verification</h2>
-          <p>Hello, <strong>${student.full_name}</strong>!</p>
-          <p>Someone is trying to log in to your STARS account.</p>
-          <p>If this is you, click the button below to continue:</p>
-          <a href="${verifyUrl}" style="
-            display: inline-block;
-            background: #f26522;
-            color: white;
-            padding: 12px 28px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 16px;
-            margin: 16px 0;
-          ">✅ Yes, This Is Me</a>
-          <p style="color: #666;">If you did <strong>NOT</strong> try to log in, ignore this email and contact your CCS admin immediately.</p>
-          <p style="color: #aaa; font-size: 12px;">⏱ This link expires in 10 minutes.</p>
-          <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;"/>
-          <p style="color: #aaa; font-size: 12px;">— STARS CCS System | College of Computer Studies</p>
-        </div>
-      `
-    }).catch(err => console.error('Email error:', err));
-
-    res.json({ success: true, requiresVerification: true, message: 'Check your email and click "Yes, This Is Me" to continue!' });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false, message: 'Server error.' });
-  }
-});
-
-// ✅ GET /api/auth/verify-login
-app.get('/api/auth/verify-login', async (req, res) => {
-  const { token } = req.query;
-  try {
-    const [rows] = await db.query(
-      'SELECT * FROM students WHERE login_token=? AND token_expires > NOW()',
-      [token]
-    );
-    if (rows.length === 0)
-      return res.send(`
-        <html>
-          <body style="font-family: sans-serif; text-align: center; padding: 60px;">
-            <h2 style="color: #ef4444;">❌ Invalid or Expired Link</h2>
-            <p>Please try logging in again.</p>
-            <a href="https://stars-student.onrender.com" style="color: #f26522;">Go to Login</a>
-          </body>
-        </html>
-      `);
-
-    const student = rows[0];
-
-    // ✅ Clear token after use
-    await db.query(
-      'UPDATE students SET login_token=NULL, token_expires=NULL WHERE student_id=?',
-      [student.student_id]
-    );
-
-    const jwtToken = jwt.sign(
+    const token = jwt.sign(
       { id: student.id, student_id: student.student_id },
       JWT_SECRET,
       { expiresIn: '8h' }
     );
 
-    // ✅ Redirect to dashboard with token
-    res.send(`
-      <html>
-        <body style="font-family: sans-serif; text-align: center; padding: 60px;">
-          <h2 style="color: #f26522;">✅ Verified! Redirecting...</h2>
-          <p>Please wait...</p>
-          <script>
-            localStorage.setItem('stars_token', '${jwtToken}');
-            localStorage.setItem('stars_user', JSON.stringify({
-              full_name:  '${student.full_name.replace(/'/g, "\\'")}',
-              student_id: '${student.student_id}',
-              email:      '${student.email}',
-              program:    '${student.program || ''}',
-              block:      '${student.block || ''}',
-              year_level: '${student.year_level || ''}'
-            }));
-            window.location.href = 'https://stars-student.onrender.com/dashboard.html';
-          </script>
-        </body>
-      </html>
-    `);
+    res.json({
+      success:    true,
+      token,
+      fullName:   student.full_name,
+      studentId:  student.student_id,
+      email:      student.email      || '',
+      program:    student.program    || '',
+      block:      student.block      || '',
+      yearLevel:  student.year_level || ''
+    });
   } catch (err) {
     console.error(err);
-    res.send(`<h2>❌ Server error. Please try again.</h2>`);
+    res.status(500).json({ success: false, message: 'Server error.' });
   }
 });
 

@@ -34,15 +34,6 @@ if (loginForm) {
     try {
       const data = await api.login(email, password);
 
-      // ✅ Email verification required
-      if (data.success && data.requiresVerification) {
-        errorEl.style.color = '#f26522';
-        errorEl.innerHTML = '📧 Check your email and click <strong>"Yes, This Is Me"</strong> to continue!';
-        btn.disabled = false;
-        btn.textContent = 'Sign In →';
-        return;
-      }
-
       if (data.success) {
         localStorage.setItem('stars_token', data.token);
         localStorage.setItem('stars_user', JSON.stringify(data.user));
