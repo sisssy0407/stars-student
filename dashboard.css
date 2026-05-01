@@ -416,11 +416,18 @@
 
 /* ── MOBILE (max 768px) ── */
 @media (max-width: 768px) {
-
   .points-overview {
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    grid-template-columns: 1.4fr repeat(2, 1fr);
+    gap: 8px;
   }
+  .points-overview .points-main {
+    grid-column: 1 / -1;
+  }
+  .points-value { font-size: 22px; }
+  .points-main .points-value { font-size: 36px; }
+  .points-card { padding: 14px; }
+  .category-badge { font-size: 10px; padding: 2px 8px; }
+
   .points-overview .points-main {
     grid-column: 1 / -1;
   }
@@ -474,10 +481,10 @@
 @media (max-width: 480px) {
 
   .points-overview {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, 1fr);
   }
   .points-overview .points-main {
-    grid-column: 1;
+    grid-column: 1 / -1;
   }
 
   .rewards-grid,
