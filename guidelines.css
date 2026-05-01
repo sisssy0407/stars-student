@@ -1,519 +1,471 @@
 /* ============================================
-   STARS — Guidelines CSS
+   STARS — Dashboard CSS
+   CCS Theme: Orange · Yellow · White
    ============================================ */
 
-/* ── Tab Switcher ── */
-.guide-tabs {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-.guide-tab {
-  background: var(--white);
-  border: 1.5px solid var(--gray2);
-  border-radius: var(--radius-sm);
-  font-family: var(--font-body);
-  font-size: 13px;
-  font-weight: 700;
-  padding: 10px 18px;
-  cursor: pointer;
-  color: var(--gray);
-  transition: all 0.2s;
-  letter-spacing: 0.3px;
-}
-.guide-tab:hover {
-  border-color: var(--orange);
-  color: var(--orange);
-}
-.guide-tab.active {
-  background: linear-gradient(135deg, var(--orange), var(--orange2));
-  border-color: transparent;
-  color: var(--white);
-  box-shadow: 0 4px 14px rgba(242,101,34,0.3);
-}
-
-/* ── Guide Section ── */
-.guide-section h3 {
-  font-family: var(--font-display);
-  font-size: 19px;
-  font-weight: 700;
-  color: var(--slate);
-  margin-bottom: 8px;
-  letter-spacing: 0.4px;
-}
-.guide-intro {
-  color: var(--gray);
-  font-size: 14px;
-  margin-bottom: 20px;
-  line-height: 1.6;
-}
-
-/* ── Steps List ── */
-.steps-list {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin-top: 16px;
-}
-.step-item {
-  display: flex;
-  gap: 16px;
-  align-items: flex-start;
-}
-.step-num {
-  width: 34px;
-  height: 34px;
-  min-width: 34px;
-  background: linear-gradient(135deg, var(--orange), var(--orange2));
-  color: var(--white);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-display);
-  font-size: 14px;
-  font-weight: 800;
-  box-shadow: 0 4px 12px rgba(242,101,34,0.25);
-}
-.step-body { flex: 1; }
-.step-title {
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--slate);
-  margin-bottom: 4px;
-}
-.step-desc {
-  font-size: 13px;
-  color: var(--gray);
-  line-height: 1.6;
-}
-
-/* ── Category Cards ── */
-.category-cards {
+/* POINTS OVERVIEW CARDS */
+.points-overview {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: 1.6fr repeat(5, 1fr); /* ✅ 5 na (dati 4) */
   gap: 16px;
-  margin-top: 8px;
+  margin-bottom: 28px;
 }
-.cat-card {
+
+.points-card {
   background: var(--white);
   border: 1.5px solid var(--gray2);
   border-radius: var(--radius);
-  padding: 20px;
-  transition: transform 0.15s, box-shadow 0.2s;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
   box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 }
-.cat-card:hover {
+.points-card:hover {
+  border-color: var(--orange);
+  box-shadow: 0 4px 20px rgba(242,101,34,0.10);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-}
-.cat-card.scholar  { border-top: 3px solid var(--scholar); }
-.cat-card.punctual { border-top: 3px solid var(--punctual); }
-.cat-card.achiever { border-top: 3px solid var(--achiever); }
-.cat-card.engage   { border-top: 3px solid var(--engage); }
-.cat-card.general  { border-top: 3px solid var(--gray); }
-
-.cat-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 14px;
-}
-.cat-icon { font-size: 26px; }
-.cat-name {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--slate);
-  margin-bottom: 3px;
 }
 
-.points-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13px;
-}
-.points-table th {
-  text-align: left;
-  padding: 7px 10px;
-  color: var(--gray);
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.7px;
-  font-weight: 700;
-  border-bottom: 2px solid var(--gray3);
-}
-.points-table td {
-  padding: 9px 10px;
-  border-bottom: 1px solid var(--gray3);
-  color: var(--slate);
-}
-.points-table tr:last-child td { border-bottom: none; }
-.points-table td strong { color: var(--orange); }
-
-/* ── Rewards Threshold ── */
-.rewards-threshold-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-top: 8px;
-}
-.threshold-item {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  background: var(--gray3);
-  border-radius: var(--radius-sm);
-  padding: 14px 18px;
-  border: 1.5px solid var(--gray2);
-  transition: border-color 0.2s;
-}
-.threshold-item:hover { border-color: var(--orange); }
-.threshold-pts {
-  font-family: var(--font-display);
-  font-size: 22px;
-  font-weight: 800;
-  color: var(--orange);
-  min-width: 70px;
-  text-align: center;
-}
-.threshold-name {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--slate);
-  margin-bottom: 2px;
-}
-.threshold-desc {
-  font-size: 12px;
-  color: var(--gray);
-}
-
-/* ── Rules List ── */
-.rules-list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 8px;
-}
-.rules-list li {
-  font-size: 14px;
-  color: var(--slate);
-  line-height: 1.6;
-  padding: 10px 14px;
-  background: var(--gray3);
-  border-radius: var(--radius-sm);
-  border-left: 3px solid var(--gray2);
-}
-.rules-list li:has(✅) { border-left-color: var(--scholar); }
-.rules-list li:has(❌) { border-left-color: var(--error); }
-
-/* ── Admin Tables ── */
-.admin-category-block {
-  margin-bottom: 24px;
-  border-radius: var(--radius);
-  overflow: hidden;
-  border: 1.5px solid var(--gray2);
-}
-.admin-cat-title {
-  padding: 12px 18px;
-  font-size: 14px;
-  font-weight: 700;
+/* Main total card */
+.points-main {
+  background: linear-gradient(135deg, var(--orange) 0%, var(--orange2) 60%, var(--yellow) 100%);
+  border-color: transparent;
   color: var(--white);
+  box-shadow: 0 6px 24px rgba(242,101,34,0.30);
+}
+.points-main:hover { border-color: transparent; }
+.points-main .points-label { color: rgba(255,255,255,0.75); }
+.points-main .points-value { font-size: 54px; color: var(--white); }
+.points-main .points-unit { color: rgba(255,255,255,0.65); font-size: 13px; font-weight: 500; }
+
+.points-label {
+  font-size: 11px;
+  color: var(--gray);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  font-weight: 700;
+}
+.points-value {
+  font-family: var(--font-display);
+  font-size: 38px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  line-height: 1;
+}
+.points-value.scholar  { color: var(--scholar); }
+.points-value.punctual { color: var(--punctual); }
+.points-value.achiever { color: var(--achiever); }
+.points-value.engage   { color: var(--engage); }
+.points-value.general  { color: #6c757d; } /* ✅ NEW */
+
+.category-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 99px;
+  width: fit-content;
+  margin-top: 6px;
   letter-spacing: 0.3px;
 }
-.scholar-bg  { background: linear-gradient(135deg, #16a34a, #22c55e); }
-.punctual-bg { background: linear-gradient(135deg, #1d4ed8, #3b82f6); }
-.achiever-bg { background: linear-gradient(135deg, #c2410c, var(--orange)); }
-.engage-bg   { background: linear-gradient(135deg, #7e22ce, #a855f7); }
-.general-bg  { background: linear-gradient(135deg, #4b5563, #6b7280); }
+.category-badge.scholar  { background: rgba(34,197,94,0.12);  color: var(--scholar); }
+.category-badge.punctual { background: rgba(59,130,246,0.12); color: var(--punctual); }
+.category-badge.achiever { background: rgba(242,101,34,0.12); color: var(--achiever); }
+.category-badge.engage   { background: rgba(168,85,247,0.12); color: var(--engage); }
+.category-badge.general  { background: rgba(108,117,125,0.12); color: #6c757d; } /* ✅ NEW */
 
-.admin-points-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13.5px;
+/* SECTION BLOCKS */
+.section-block {
   background: var(--white);
+  border: 1.5px solid var(--gray2);
+  border-radius: var(--radius);
+  padding: 26px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 }
-.admin-points-table th {
-  text-align: left;
-  padding: 10px 16px;
-  color: var(--gray);
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.7px;
-  font-weight: 700;
-  border-bottom: 2px solid var(--gray3);
-  background: var(--off-white);
-}
-.admin-points-table td {
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--gray3);
-  color: var(--slate);
-}
-.admin-points-table tr:last-child td { border-bottom: none; }
-.admin-points-table tr:hover td { background: var(--off-white); }
-.pts-cell {
-  font-weight: 800;
-  color: var(--orange);
-  font-family: var(--font-display);
-  font-size: 15px;
-  white-space: nowrap;
-}
-
-/* ── Dark Mode Toggle in Sidebar ── */
-.dark-mode-row {
+.section-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 4px;
-  margin-bottom: 12px;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
+  margin-bottom: 18px;
 }
-.dark-mode-label {
-  color: rgba(255,255,255,0.6);
-  font-size: 13px;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 7px;
+.section-block h3 {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--slate);
+  margin-bottom: 18px;
+  letter-spacing: 0.5px;
 }
-.toggle-switch {
-  position: relative;
+.section-header h3 { margin-bottom: 0; }
+
+/* DATA TABLE */
+.table-wrap { 
+  overflow-x: auto; 
+  max-height: 320px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.data-table th {
+  text-align: left;
+  padding: 10px 14px;
+  color: var(--gray);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  font-weight: 700;
+  border-bottom: 2px solid var(--gray3);
+}
+.data-table td {
+  padding: 14px;
+  border-bottom: 1px solid var(--gray3);
+  color: var(--slate);
+}
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:hover td { background: var(--off-white); }
+
+.status-badge {
   display: inline-block;
-  width: 42px;
-  height: 24px;
-  cursor: pointer;
-}
-.toggle-switch input { display: none; }
-.toggle-slider {
-  position: absolute;
-  inset: 0;
-  background: rgba(255,255,255,0.15);
+  padding: 4px 12px;
   border-radius: 99px;
-  transition: background 0.3s;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
 }
-.toggle-slider::before {
-  content: '';
-  position: absolute;
-  width: 18px; height: 18px;
-  border-radius: 50%;
-  background: var(--white);
-  top: 3px; left: 3px;
-  transition: transform 0.3s;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-}
-.toggle-switch input:checked + .toggle-slider {
-  background: var(--orange);
-}
-.toggle-switch input:checked + .toggle-slider::before {
-  transform: translateX(18px);
+.status-pending  { background: rgba(255,193,7,0.15);   color: #B7791F; }
+.status-approved { background: rgba(34,197,94,0.12);  color: var(--success); }
+.status-rejected { background: rgba(239,68,68,0.12);  color: var(--error); }
+
+.loading-row {
+  color: var(--gray);
+  text-align: center;
+  padding: 28px !important;
+  font-size: 14px;
 }
 
-/* ── DARK MODE OVERRIDES ── */
-body.dark-mode {
-  background: #0f0f1a;
-  color: #e8e0d8;
+/* REWARDS GRID */
+.rewards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 14px;
 }
-body.dark-mode .main-content {
-  background: #0f0f1a;
+.rewards-full-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(248px, 1fr));
+  gap: 18px;
 }
-body.dark-mode .section-block,
-body.dark-mode .cat-card,
-body.dark-mode .admin-points-table,
-body.dark-mode .form-card,
-body.dark-mode .modal-box {
-  background: #1a1a2e;
-  border-color: #2a2a3e;
+
+.reward-card {
+  background: var(--white);
+  border: 1.5px solid var(--gray2);
+  border-radius: var(--radius);
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 }
-body.dark-mode .guide-section h3,
-body.dark-mode .step-title,
-body.dark-mode .cat-name,
-body.dark-mode .threshold-name,
-body.dark-mode .page-title {
-  color: #f0ebe3;
+.reward-card:hover {
+  border-color: var(--orange);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(242,101,34,0.12);
 }
-body.dark-mode .threshold-item,
-body.dark-mode .rules-list li {
-  background: #1e1e30;
-  border-color: #2a2a3e;
+
+.reward-pts {
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 800;
+  color: var(--orange);
+  letter-spacing: 1px;
 }
-body.dark-mode .rules-list li {
-  color: #e8e0d8;
+.reward-name { font-size: 14px; font-weight: 700; color: var(--slate); }
+.reward-desc { font-size: 12px; color: var(--gray); line-height: 1.5; }
+.reward-card .btn-primary { margin-top: auto; }
+
+.reward-card.locked {
+  opacity: 0.6;
+  background: var(--gray3);
 }
-body.dark-mode .step-desc,
-body.dark-mode .guide-intro,
-body.dark-mode .threshold-desc,
-body.dark-mode .reward-desc,
-body.dark-mode .reward-name,
-body.dark-mode .points-label,
-body.dark-mode .points-unit,
-body.dark-mode .cat-name {
-  color: #c8c0b8;
+.reward-card.locked .btn-primary {
+  background: var(--gray2);
+  color: var(--gray);
+  cursor: not-allowed;
+  box-shadow: none;
 }
-body.dark-mode .threshold-name { color: #e8e0d8; }
-body.dark-mode .points-table th,
-body.dark-mode .admin-points-table th {
-  background: #1e1e30;
-  border-color: #2a2a3e;
+
+/* FORM CARD */
+.form-card {
+  background: var(--white);
+  border: 1.5px solid var(--gray2);
+  border-radius: var(--radius);
+  padding: 36px;
+  max-width: 660px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 }
-body.dark-mode .points-table td,
-body.dark-mode .admin-points-table td {
-  border-color: #2a2a3e;
-  color: #c8c0b8;
+
+/* UPLOAD ZONE */
+.upload-zone {
+  border: 2px dashed var(--gray2);
+  border-radius: var(--radius-sm);
+  padding: 36px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  background: var(--gray3);
 }
-body.dark-mode .admin-points-table tr:hover td {
-  background: #22223a;
+.upload-zone:hover { border-color: var(--orange); background: var(--orange-dim); }
+.upload-zone.drag-over { border-color: var(--orange); background: rgba(242,101,34,0.08); }
+.upload-icon { font-size: 34px; margin-bottom: 10px; }
+.upload-link { color: var(--orange); font-weight: 700; }
+.upload-zone small { color: var(--gray); font-size: 12px; }
+.upload-preview { margin-top: 12px; font-size: 13px; color: var(--success); font-weight: 600; }
+
+.form-card .form-group + .form-group {
+  padding-top: 4px;
 }
-body.dark-mode .guide-tab {
-  background: #1a1a2e;
-  border-color: #2a2a3e;
-  color: rgba(255,255,255,0.5);
-}
-body.dark-mode .points-overview .points-card,
-body.dark-mode .reward-card {
-  background: #1a1a2e;
-  border-color: #2a2a3e;
-}
-body.dark-mode .data-table th { border-color: #2a2a3e; }
-body.dark-mode .data-table td { border-color: #2a2a3e; color: #c8c0b8; }
-body.dark-mode .data-table tr:hover td { background: #22223a; }
-body.dark-mode .page-sub { color: #6a6a7a; }
-body.dark-mode .balance-pill {
-  background: #1a1a2e;
-  border-color: #2a2a3e;
-}
-body.dark-mode .form-group input,
-body.dark-mode .form-group select,
-body.dark-mode .form-group textarea {
-  background: #1e1e30;
-  border-color: #2a2a3e;
-  color: #e8e0d8;
-}
-body.dark-mode .upload-zone {
-  background: #1e1e30;
-  border-color: #2a2a3e;
-}
-body.dark-mode .skeleton {
-  background: linear-gradient(90deg, #1e2846 25%, #2a3560 50%, #1e2846 75%);
+
+/* ── Skeleton Loading ── */
+.skeleton {
+  background: linear-gradient(90deg, #e8e0d8 25%, #f5f0eb 50%, #e8e0d8 75%);
   background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 6px;
+  height: 14px;
+  display: inline-block;
+  width: 100%;
 }
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.skeleton-row td {
+  padding: 14px;
+  border-bottom: 1px solid var(--gray3);
+}
+
+/* ══════════════════════════════════════════
+   MOTIVATION MILESTONES
+   ══════════════════════════════════════════ */
+
+.motivation-progress-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: linear-gradient(135deg, rgba(242,101,34,0.06) 0%, rgba(250,204,21,0.08) 100%);
+  border: 1.5px solid rgba(242,101,34,0.18);
+  border-radius: var(--radius);
+  padding: 1.1rem 1.3rem;
+}
+
+.mot-banner-icon {
+  font-size: 28px;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.mot-banner-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.mot-banner-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--slate);
+  margin: 0 0 3px;
+  font-family: var(--font-display);
+}
+
+.mot-banner-sub {
+  font-size: 12px;
+  color: var(--gray);
+  margin: 0 0 10px;
+}
+
+.mot-progress-bar-wrap {
+  background: var(--gray2);
+  border-radius: 99px;
+  height: 8px;
+  overflow: hidden;
+}
+
+.mot-progress-bar-fill {
+  height: 8px;
+  border-radius: 99px;
+  background: linear-gradient(90deg, var(--orange), var(--yellow));
+  width: 0%;
+  transition: width 1.2s cubic-bezier(.4, 0, .2, 1);
+}
+
+.mot-progress-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--gray);
+  font-weight: 600;
+  margin-top: 5px;
+}
+
+/* Milestones card grid */
+.milestones-grid {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--orange) var(--gray3);
+}
+
+.milestones-grid .ms-card {
+  min-width: 150px;
+  flex-shrink: 0;
+}
+
+.ms-card {
+  border-radius: var(--radius);
+  border: 1.5px solid var(--gray2);
+  padding: 0.9rem 1rem;
+  background: var(--white);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: transform 0.15s, box-shadow 0.2s;
+}
+
+.ms-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+}
+
+.ms-pts {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+.ms-reward-name {
+  font-size: 12px;
+  color: var(--gray);
+  margin: 0 0 6px;
+  line-height: 1.4;
+}
+
+.ms-status-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 99px;
+  display: inline-block;
+  width: fit-content;
+}
+
+/* Unlocked state */
+.ms-unlocked {
+  border-color: rgba(34,197,94,0.3);
+  background: rgba(34,197,94,0.04);
+}
+.ms-unlocked .ms-pts        { color: #16a34a; }
+.ms-unlocked .ms-status-badge { background: rgba(34,197,94,0.12); color: #15803d; }
+
+/* Next goal state */
+.ms-next {
+  border-color: rgba(242,101,34,0.35);
+  background: rgba(242,101,34,0.04);
+  box-shadow: 0 0 0 2px rgba(242,101,34,0.12);
+}
+.ms-next .ms-pts          { color: var(--orange); }
+.ms-next .ms-status-badge { background: rgba(242,101,34,0.12); color: var(--orange); }
+
+/* Locked state */
+.ms-locked { opacity: 0.65; }
+.ms-locked .ms-pts          { color: var(--gray); }
+.ms-locked .ms-status-badge { background: var(--gray3); color: var(--gray); }
 
 /* ============================================
-   RESPONSIVE — Guidelines & All Pages
+   MOBILE RESPONSIVE — Dashboard specific
    ============================================ */
 
 /* ── TABLET (max 1024px) ── */
 @media (max-width: 1024px) {
-  .category-cards {
-    grid-template-columns: repeat(2, 1fr);
+  .points-overview {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .points-overview .points-main {
+    grid-column: 1 / -1;
+  }
+  .rewards-full-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   }
 }
 
 /* ── MOBILE (max 768px) ── */
 @media (max-width: 768px) {
+  .points-overview {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .points-overview .points-main {
+    grid-column: 1 / -1;
+  }
+  .points-main .points-value { font-size: 40px; }
+  .points-value { font-size: 24px; }
+  .points-card { padding: 14px; }
+  .category-badge { font-size: 10px; padding: 2px 8px; }
 
-  /* Guide sections */
-  .guide-section h3 {
-    font-size: 16px;
-  }
-  .guide-intro {
-    font-size: 13px;
-  }
+  .section-block { padding: 16px; }
+  .section-header { flex-wrap: wrap; gap: 8px; }
+  .form-card { padding: 20px; max-width: 100%; }
+  .upload-zone { padding: 24px 16px; }
 
-  /* Category cards — 1 column on mobile */
-  .category-cards {
-    grid-template-columns: 1fr;
-    gap: 12px;
+  .rewards-grid,
+  .rewards-full-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
   }
-  .cat-card {
-    padding: 16px;
-  }
-  .cat-icon { font-size: 22px; }
-  .cat-name { font-size: 13px; }
-
-  /* Points table inside cat cards */
-  .points-table th,
-  .points-table td {
-    padding: 7px 8px;
-    font-size: 12px;
-  }
-
-  /* Steps list */
-  .step-title { font-size: 14px; }
-  .step-desc  { font-size: 12px; }
-  .step-num   { width: 30px; height: 30px; min-width: 30px; font-size: 13px; }
-
-  /* Threshold items */
-  .threshold-item {
-    padding: 12px 14px;
-    gap: 12px;
-  }
-  .threshold-pts {
-    font-size: 18px;
-    min-width: 56px;
-  }
-  .threshold-name { font-size: 13px; }
-  .threshold-desc { font-size: 11px; }
-
-  /* Rules list */
-  .rules-list li {
-    font-size: 13px;
-    padding: 9px 12px;
-  }
-
-  /* Admin tables */
-  .admin-points-table th,
-  .admin-points-table td {
-    padding: 9px 10px;
-    font-size: 12px;
-  }
-  .pts-cell { font-size: 13px; }
-
-  /* Guide tabs — wrap on mobile */
-  .guide-tabs {
-    gap: 6px;
-  }
-  .guide-tab {
-    padding: 8px 14px;
-    font-size: 12px;
-  }
+  .reward-card { padding: 16px; }
+  .reward-pts { font-size: 24px; }
+  .page-header { flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+  .page-title { font-size: 26px; }
+  .balance-pill { width: 100%; text-align: center; }
+  .motivation-progress-banner { flex-direction: column; gap: 8px; }
+  .milestones-grid { gap: 8px; }
+  .milestones-grid .ms-card { min-width: 130px; }
+  .ms-pts { font-size: 17px; }
 }
 
 /* ── SMALL PHONES (max 480px) ── */
 @media (max-width: 480px) {
-
-  /* Category cards */
-  .category-cards {
-    grid-template-columns: 1fr;
-  }
-  .cat-card { padding: 14px; }
-
-  /* Steps */
-  .step-item { gap: 10px; }
-
-  /* Threshold */
-  .threshold-item {
-    flex-direction: column;
-    align-items: flex-start;
+  .points-overview {
+    grid-template-columns: repeat(2, 1fr);
     gap: 6px;
-    padding: 12px;
   }
-  .threshold-pts {
-    min-width: unset;
-    text-align: left;
+  .points-overview .points-main {
+    grid-column: 1 / -1;
   }
+  .points-main .points-value { font-size: 34px; }
+  .points-value { font-size: 20px; }
+  .points-card { padding: 10px; }
 
-  /* Rules */
-  .rules-list li { font-size: 12px; }
+  .rewards-grid,
+  .rewards-full-grid { grid-template-columns: 1fr; }
 
-  /* Admin table — scrollable */
-  .admin-category-block {
-    overflow-x: auto;
-  }
-  .admin-points-table {
-    min-width: 320px;
-  }
-
-  /* Guide tabs */
-  .guide-tabs { gap: 4px; }
-  .guide-tab  { padding: 7px 10px; font-size: 11px; }
+  .data-table th,
+  .data-table td { padding: 8px 6px; font-size: 11px; }
+  .status-badge { padding: 3px 8px; font-size: 11px; }
+  .section-block { padding: 14px; }
+  .form-card { padding: 16px; }
+  .milestones-grid .ms-card { min-width: 120px; }
 }
