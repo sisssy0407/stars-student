@@ -401,7 +401,7 @@
 /* ── TABLET (max 1024px) ── */
 @media (max-width: 1024px) {
   .points-overview {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
   }
   .points-overview .points-main {
     grid-column: 1 / -1;
@@ -409,104 +409,63 @@
   .rewards-full-grid {
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   }
-  .milestones-grid {
-    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  }
 }
 
 /* ── MOBILE (max 768px) ── */
 @media (max-width: 768px) {
   .points-overview {
-    grid-template-columns: 1.4fr repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 8px;
   }
   .points-overview .points-main {
     grid-column: 1 / -1;
   }
-  .points-value { font-size: 22px; }
-  .points-main .points-value { font-size: 36px; }
+  .points-main .points-value { font-size: 40px; }
+  .points-value { font-size: 24px; }
   .points-card { padding: 14px; }
   .category-badge { font-size: 10px; padding: 2px 8px; }
 
-  .points-overview .points-main {
-    grid-column: 1 / -1;
-  }
-  .points-main .points-value { font-size: 44px; }
-  .points-value { font-size: 28px; }
-
   .section-block { padding: 16px; }
   .section-header { flex-wrap: wrap; gap: 8px; }
-
-  .form-card {
-    padding: 20px;
-    max-width: 100%;
-  }
-
+  .form-card { padding: 20px; max-width: 100%; }
   .upload-zone { padding: 24px 16px; }
 
-  .rewards-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
+  .rewards-grid,
   .rewards-full-grid {
     grid-template-columns: 1fr 1fr;
     gap: 10px;
   }
   .reward-card { padding: 16px; }
   .reward-pts { font-size: 24px; }
-
   .page-header { flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
   .page-title { font-size: 26px; }
-
-  .balance-pill {
-    width: 100%;
-    text-align: center;
-  }
-
-  /* Motivation milestones */
-  .motivation-progress-banner {
-    flex-direction: column;
-    gap: 8px;
-  }
-  .milestones-grid {
-    gap: 8px;
-  }
-  .milestones-grid .ms-card {
-    min-width: 130px;
-  }
+  .balance-pill { width: 100%; text-align: center; }
+  .motivation-progress-banner { flex-direction: column; gap: 8px; }
+  .milestones-grid { gap: 8px; }
+  .milestones-grid .ms-card { min-width: 130px; }
   .ms-pts { font-size: 17px; }
 }
 
 /* ── SMALL PHONES (max 480px) ── */
 @media (max-width: 480px) {
-
   .points-overview {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
   }
   .points-overview .points-main {
     grid-column: 1 / -1;
   }
+  .points-main .points-value { font-size: 34px; }
+  .points-value { font-size: 20px; }
+  .points-card { padding: 10px; }
 
   .rewards-grid,
-  .rewards-full-grid {
-    grid-template-columns: 1fr;
-  }
+  .rewards-full-grid { grid-template-columns: 1fr; }
 
   .data-table th,
-  .data-table td {
-    padding: 8px 6px;
-    font-size: 11px;
-  }
-  .status-badge {
-    padding: 3px 8px;
-    font-size: 11px;
-  }
-
+  .data-table td { padding: 8px 6px; font-size: 11px; }
+  .status-badge { padding: 3px 8px; font-size: 11px; }
   .section-block { padding: 14px; }
   .form-card { padding: 16px; }
-
-  /* Milestones — still horizontal scroll on small screens */
-  .milestones-grid .ms-card {
-    min-width: 120px;
-  }
+  .milestones-grid .ms-card { min-width: 120px; }
 }
