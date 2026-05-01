@@ -353,8 +353,7 @@ app.get('/api/rewards/history/:student_id', authMiddleware, async (req, res) => 
 });
 
 // ✅ GET /api/ranking
-app.get('/api/ranking', authMiddleware, async (req, res) => {
-  try {
+app.get('/api/ranking', async (req, res) => {  try {
     const { year } = req.query;
     let query = `
       SELECT s.student_id, s.full_name, s.program, s.year_level, s.block,
