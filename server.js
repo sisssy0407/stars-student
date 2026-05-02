@@ -410,7 +410,7 @@ app.get('/api/ranking', async (req, res) => {
       query += ' WHERE s.year_level = ?';
       params.push(year);
     }
-    query += ' GROUP BY s.student_id HAVING total_points >= 0 ORDER BY total_points DESC LIMIT 50';
+    query += ' GROUP BY s.student_id ORDER BY total_points DESC LIMIT 50';
 
     const [rows] = await db.query(query, params);
     res.json({ success: true, ranking: rows });
