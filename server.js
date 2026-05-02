@@ -178,6 +178,7 @@ app.post('/api/auth/change-password', async (req, res) => {
 });
 
 // ✅ GET /api/points/:student_id
+// Balance = total earned - total deducted
 app.get('/api/points/:student_id', authMiddleware, async (req, res) => {
   try {
     const [categories] = await db.query(
@@ -199,9 +200,20 @@ app.get('/api/points/:student_id', authMiddleware, async (req, res) => {
       [req.params.student_id]
     );
 
+    const [deductRows] = await db.query(
+      `SELECT COALESCE(SUM(points_spent), 0) AS total_deducted
+       FROM point_deductions
+       WHERE student_id = ?`,
+      [req.params.student_id]
+    );
+
+    const totalEarned   = totRows[0].total;
+    const totalDeducted = deductRows[0].total_deducted;
+    const balance       = totalEarned - totalDeducted;
+
     res.json({
       success:    true,
-      total:      totRows[0].total,
+      total:      balance,
       categories
     });
   } catch (err) {
@@ -305,12 +317,21 @@ app.post('/api/rewards/redeem', authMiddleware, async (req, res) => {
 
     const reward = rewards[0];
 
+    // Get total earned
     const [totRows] = await db.query(
       `SELECT COALESCE(SUM(points_awarded), 0) AS total
        FROM submissions WHERE student_id = ? AND status = 'approved'`,
       [student_id]
     );
-    const balance = totRows[0].total;
+
+    // Get total deducted
+    const [deductRows] = await db.query(
+      `SELECT COALESCE(SUM(points_spent), 0) AS total_deducted
+       FROM point_deductions WHERE student_id = ?`,
+      [student_id]
+    );
+
+    const balance = totRows[0].total - deductRows[0].total_deducted;
 
     const [existing] = await db.query(
       `SELECT id FROM redemptions WHERE student_id = ? AND reward_id = ? AND claimed = 0`,
@@ -322,10 +343,18 @@ app.post('/api/rewards/redeem', authMiddleware, async (req, res) => {
     if (balance < reward.points_required)
       return res.json({ success: false, message: 'Not enough points.' });
 
+    // Insert redemption record
     await db.query(
       `INSERT INTO redemptions (student_id, reward_id, reward_name, points_spent, status)
        VALUES (?, ?, ?, ?, 'pending')`,
       [student_id, rewardId, reward.name, reward.points_required]
+    );
+
+    // ✅ Insert point deduction record
+    await db.query(
+      `INSERT INTO point_deductions (student_id, points_spent, reason)
+       VALUES (?, ?, ?)`,
+      [student_id, reward.points_required, `Redeemed: ${reward.name}`]
     );
 
     res.json({ success: true, message: 'Reward redeemed! Show this to your coordinator.' });
@@ -358,7 +387,9 @@ app.get('/api/ranking', async (req, res) => {
     const { year } = req.query;
     let query = `
       SELECT s.student_id, s.full_name, s.program, s.year_level, s.block,
-             COALESCE(SUM(sub.points_awarded), 0) AS total_points
+             COALESCE(SUM(sub.points_awarded), 0) - COALESCE(
+               (SELECT SUM(pd.points_spent) FROM point_deductions pd WHERE pd.student_id = s.student_id), 0
+             ) AS total_points
       FROM students s
       LEFT JOIN submissions sub
         ON sub.student_id = s.student_id AND sub.status = 'approved'
