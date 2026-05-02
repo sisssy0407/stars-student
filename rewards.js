@@ -1,5 +1,5 @@
 // ============================================
-// STARS — Rewards JS
+// STARS — Rewards JS (Fixed)
 // ============================================
 
 let selectedRewardId   = null;
@@ -10,15 +10,39 @@ let currentBalance     = 0;
 document.addEventListener('DOMContentLoaded', async () => {
 
   // ── Load balance ──
+  await loadBalance();
+
+  // ── Load rewards ──
+  await loadRewards();
+
+  // ── Load redemption history ──
+  await loadHistory();
+
+  // ── Modal events ──
+  document.getElementById('modalCancel').addEventListener('click', closeModal);
+  document.getElementById('modalConfirm').addEventListener('click', confirmRedeem);
+  document.getElementById('receiptClose').addEventListener('click', closeReceipt);
+  document.getElementById('receiptPrint').addEventListener('click', () => window.print());
+});
+
+// ─────────────────────────────────────────
+// Load balance from server
+// ─────────────────────────────────────────
+async function loadBalance() {
   const pointsData = await api.getMyPoints();
   if (pointsData && pointsData.success) {
+    // api.getMyPoints() returns { success, balance, categories }
     currentBalance = pointsData.balance ?? 0;
     setEl('balanceDisplay', `${currentBalance} pts`);
   }
+}
 
-  // ── Load rewards ──
-  const rwData = await api.getRewards();
+// ─────────────────────────────────────────
+// Load & render reward cards
+// ─────────────────────────────────────────
+async function loadRewards() {
   const grid   = document.getElementById('rewardsGrid');
+  const rwData = await api.getRewards();
 
   if (rwData && rwData.success && rwData.rewards.length > 0) {
     grid.innerHTML = rwData.rewards.map(r => {
@@ -50,16 +74,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   } else {
     grid.innerHTML = '<p style="color:var(--gray)">No rewards available.</p>';
   }
-
-  // ── Load redemption history ──
-  await loadHistory();
-
-  // ── Modal events ──
-  document.getElementById('modalCancel').addEventListener('click', closeModal);
-  document.getElementById('modalConfirm').addEventListener('click', confirmRedeem);
-  document.getElementById('receiptClose').addEventListener('click', closeReceipt);
-  document.getElementById('receiptPrint').addEventListener('click', () => window.print());
-});
+}
 
 // ─────────────────────────────────────────
 // Load & render redemption history
@@ -129,10 +144,18 @@ async function confirmRedeem() {
   closeModal();
 
   if (data && data.success) {
-    currentBalance -= selectedRewardCost;
-    setEl('balanceDisplay', `${currentBalance} pts`);
+    // ✅ Re-fetch actual balance from server (earned - deducted)
+    await loadBalance();
+
+    // ✅ Re-render reward cards with updated balance
+    await loadRewards();
+
+    // ✅ Show receipt with updated balance
     showReceipt(selectedRewardName, selectedRewardCost);
+
+    // ✅ Refresh redemption history
     await loadHistory();
+
   } else {
     alert(data?.message || 'Redemption failed. Please try again.');
   }
@@ -163,7 +186,7 @@ function showReceipt(rewardName, pointsUsed) {
   document.getElementById('rcptId').textContent     = user.student_id  || '—';
   document.getElementById('rcptReward').textContent = rewardName;
   document.getElementById('rcptPts').textContent    = pointsUsed + ' pts';
-  document.getElementById('rcptBal').textContent    = currentBalance + ' pts';
+  document.getElementById('rcptBal').textContent    = currentBalance + ' pts'; // ✅ updated balance na
 
   document.getElementById('receiptModal').style.display = 'flex';
 }
