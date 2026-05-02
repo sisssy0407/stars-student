@@ -84,22 +84,22 @@
         <div class="step-item">
           <div class="step-num">1</div>
           <div class="step-body">
-            <p class="step-title">Register your account</p>
-            <p class="step-desc">Go to the login page and click <strong>Register</strong>. Enter your full name, Student ID (format: YYYY-XXXXX), and create a password. You only need to do this once.</p>
+            <p class="step-title">Log in to your account</p>
+            <p class="step-desc">Your account is created by your CCS coordinator. Use your school email (<strong>[studentid]@gordoncollege.edu.ph</strong>) and the temporary password provided to you to sign in.</p>
           </div>
         </div>
         <div class="step-item">
           <div class="step-num">2</div>
           <div class="step-body">
-            <p class="step-title">Log in to your account</p>
-            <p class="step-desc">Use your Student ID and password to sign in. You will be redirected to your Dashboard automatically.</p>
+            <p class="step-title">Change your password (optional)</p>
+            <p class="step-desc">After logging in, go to <strong>Settings</strong> and change your password to something only you know. This is recommended for your account's security.</p>
           </div>
         </div>
         <div class="step-item">
           <div class="step-num">3</div>
           <div class="step-body">
             <p class="step-title">Check your Dashboard</p>
-            <p class="step-desc">Your Dashboard shows your <strong>Total Merit Points</strong> and your points per category: Scholar Track, Punctual Pass, Achievers Mark, and Engage Badge.</p>
+            <p class="step-desc">Your Dashboard shows your <strong>Total Merit Points</strong> and your points per category: Scholar Track, Punctual Pass, Achievers Mark, Engage Badge, and General.</p>
           </div>
         </div>
         <div class="step-item">
@@ -164,7 +164,7 @@
           <table class="points-table">
             <thead><tr><th>Achievement</th><th>Points</th></tr></thead>
             <tbody>
-              <tr><td>Perfect Attendance per Semester(100%)</td><td><strong>20 pts</strong></td></tr>
+              <tr><td>Perfect Attendance per Semester (100%)</td><td><strong>20 pts</strong></td></tr>
             </tbody>
           </table>
         </div>
@@ -258,7 +258,6 @@
   <script src="auth.js"></script>
   <script src="guidelines.js"></script>
   <script>
-    // Load rewards dynamically from API
     (async function() {
       const list = document.getElementById('guideRewardsList');
       const rwData = await api.getRewards();
@@ -302,7 +301,6 @@
       }
     })();
 
-    // Hamburger menu
     (function() {
       const btn     = document.getElementById('hamburgerBtn');
       const sidebar = document.getElementById('sidebar');
