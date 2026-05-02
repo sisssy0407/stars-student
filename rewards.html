@@ -10,85 +10,90 @@
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
   <style>
     /* ── Redemption History ── */
-    .history-section {
-      margin-top: 2.5rem;
-    }
+    .history-section { margin-top: 2.5rem; }
     .history-section .section-title {
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: 1rem;
-      color: var(--text, #111);
+      font-size: 1.1rem; font-weight: 700;
+      margin-bottom: 1rem; color: var(--slate);
     }
-    .history-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.9rem;
+    .history-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    .history-table th, .history-table td {
+      padding: 0.75rem 1rem; text-align: left;
+      border-bottom: 1px solid var(--gray2);
     }
-    .history-table th,
-    .history-table td {
-      padding: 0.75rem 1rem;
-      text-align: left;
-      border-bottom: 1px solid var(--border, #e5e7eb);
-    }
-    .history-table th {
-      font-weight: 600;
-      color: var(--gray, #6b7280);
-      background: var(--card-bg, #f9fafb);
-    }
-    .history-table tr:last-child td {
-      border-bottom: none;
-    }
-    .empty-history {
-      color: var(--gray, #6b7280);
-      font-size: 0.9rem;
-      padding: 1rem 0;
-    }
-    .status-badge {
-      display: inline-block;
-      padding: 0.25rem 0.65rem;
-      border-radius: 999px;
-      font-size: 0.78rem;
-      font-weight: 600;
-      text-transform: capitalize;
-    }
-    .status-pending  { background: #fef9c3; color: #a16207; }
-    .status-approved { background: #dcfce7; color: #166534; }
-    .status-rejected { background: #fee2e2; color: #991b1b; }
-    .status-claimed  { background: #dbeafe; color: #1e40af; }
-
-    /* ── History wrapper card ── */
+    .history-table th { font-weight: 600; color: var(--gray); background: var(--gray3); }
+    .history-table tr:last-child td { border-bottom: none; }
+    .empty-history { color: var(--gray); font-size: 0.9rem; padding: 1rem; }
     .history-wrapper {
-      background: var(--card-bg, #fff);
-      border: 1px solid var(--border, #e5e7eb);
-      border-radius: 12px;
-      overflow: hidden;
+      background: var(--white); border: 1.5px solid var(--gray2);
+      border-radius: var(--radius); overflow: hidden;
     }
-    .history-loading {
-      padding: 1.2rem;
-      color: var(--gray, #6b7280);
-      font-size: 0.9rem;
-    }
+    .history-loading { padding: 1.2rem; color: var(--gray); font-size: 0.9rem; }
 
     /* ── Stock Badge ── */
     .stock-badge {
-      display: inline-block;
-      font-size: 0.78rem;
-      font-weight: 600;
-      padding: 0.2rem 0.6rem;
-      border-radius: 999px;
-      margin-bottom: 0.5rem;
+      display: inline-block; font-size: 0.78rem; font-weight: 600;
+      padding: 0.2rem 0.6rem; border-radius: 999px; margin-bottom: 0.5rem;
     }
     .stock-badge.in  { background: #dcfce7; color: #166534; }
     .stock-badge.out { background: #fee2e2; color: #991b1b; }
+
+    /* ── Receipt Modal ── */
+    .receipt-box {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 36px;
+      max-width: 420px;
+      width: 90%;
+      box-shadow: var(--shadow-lg);
+      text-align: center;
+    }
+    .receipt-icon { font-size: 48px; margin-bottom: 8px; }
+    .receipt-title {
+      font-family: var(--font-display);
+      font-size: 22px; font-weight: 800;
+      color: var(--slate); margin-bottom: 4px;
+    }
+    .receipt-sub { font-size: 13px; color: var(--gray); margin-bottom: 24px; }
+    .receipt-divider {
+      border: none; border-top: 1.5px dashed var(--gray2);
+      margin: 16px 0;
+    }
+    .receipt-row {
+      display: flex; justify-content: space-between;
+      font-size: 14px; margin-bottom: 10px;
+      text-align: left;
+    }
+    .receipt-row .label { color: var(--gray); font-weight: 600; }
+    .receipt-row .value { color: var(--slate); font-weight: 700; text-align: right; }
+    .receipt-ref {
+      font-size: 12px; color: var(--gray);
+      background: var(--gray3); border-radius: var(--radius-sm);
+      padding: 8px 14px; margin: 16px 0; letter-spacing: 1px;
+      font-weight: 700;
+    }
+    .receipt-note {
+      font-size: 12px; color: var(--orange);
+      font-weight: 700; margin-bottom: 20px;
+      background: var(--orange-dim); border-radius: var(--radius-sm);
+      padding: 10px 14px;
+    }
+    .receipt-actions { display: flex; gap: 10px; justify-content: center; }
+    .receipt-actions .btn-primary { width: auto; padding: 12px 24px; }
+    .receipt-actions .btn-ghost   { width: auto; padding: 12px 24px; }
+
+    @media print {
+      body * { visibility: hidden; }
+      #receiptModal, #receiptModal * { visibility: visible; }
+      #receiptModal { position: fixed; inset: 0; display: flex !important; background: white; }
+      .receipt-actions { display: none; }
+    }
   </style>
 </head>
 <body class="app-page">
 
   <!-- HAMBURGER BUTTON -->
   <button class="hamburger-btn" id="hamburgerBtn" aria-label="Open menu">
-    <span></span>
-    <span></span>
-    <span></span>
+    <span></span><span></span><span></span>
   </button>
 
   <!-- OVERLAY -->
@@ -98,17 +103,15 @@
     <div class="sidebar-brand"><span class="brand-star">★</span><span>STARS</span></div>
     <nav class="sidebar-nav">
       <a href="dashboard.html" class="nav-item"><span class="nav-icon">⊞</span> Dashboard</a>
-      <a href="submit.html" class="nav-item"><span class="nav-icon">↑</span> Submit Achievement</a>
-      <a href="rewards.html" class="nav-item active"><span class="nav-icon">🏆</span> Rewards</a>
-      <a href="ranking.html" class="nav-item"><span class="nav-icon">📊</span> Rankings</a>
+      <a href="submit.html"    class="nav-item"><span class="nav-icon">↑</span> Submit Achievement</a>
+      <a href="rewards.html"   class="nav-item active"><span class="nav-icon">🏆</span> Rewards</a>
+      <a href="ranking.html"   class="nav-item"><span class="nav-icon">📊</span> Rankings</a>
       <a href="guidelines.html" class="nav-item"><span class="nav-icon">📋</span> Guidelines</a>
-      <a href="settings.html" class="nav-item"><span class="nav-icon">⚙️</span> Settings</a>
+      <a href="settings.html"  class="nav-item"><span class="nav-icon">⚙️</span> Settings</a>
     </nav>
     <div class="sidebar-footer">
       <div class="dark-mode-row">
-        <span class="dark-mode-label">
-          <span id="themeIcon">🌙</span> Dark Mode
-        </span>
+        <span class="dark-mode-label"><span id="themeIcon">🌙</span> Dark Mode</span>
         <label class="toggle-switch">
           <input type="checkbox" id="darkModeToggle"/>
           <span class="toggle-slider"></span>
@@ -161,6 +164,51 @@
         </div>
       </div>
     </div>
+
+    <!-- Receipt Modal -->
+    <div class="modal-overlay" id="receiptModal" style="display:none">
+      <div class="receipt-box">
+        <div class="receipt-icon">🎉</div>
+        <p class="receipt-title">Redemption Successful!</p>
+        <p class="receipt-sub">Show this receipt to your CCS coordinator to claim your reward.</p>
+
+        <div class="receipt-ref" id="rcptRef">STARS-XXXXXX</div>
+
+        <div class="receipt-row">
+          <span class="label">Student Name</span>
+          <span class="value" id="rcptName">—</span>
+        </div>
+        <div class="receipt-row">
+          <span class="label">Student ID</span>
+          <span class="value" id="rcptId">—</span>
+        </div>
+        <hr class="receipt-divider"/>
+        <div class="receipt-row">
+          <span class="label">Reward</span>
+          <span class="value" id="rcptReward">—</span>
+        </div>
+        <div class="receipt-row">
+          <span class="label">Points Used</span>
+          <span class="value" id="rcptPts">—</span>
+        </div>
+        <div class="receipt-row">
+          <span class="label">Remaining Balance</span>
+          <span class="value" id="rcptBal">—</span>
+        </div>
+        <hr class="receipt-divider"/>
+        <div class="receipt-row">
+          <span class="label">Date & Time</span>
+          <span class="value" id="rcptDate">—</span>
+        </div>
+
+        <p class="receipt-note">📋 Present this to your CCS coordinator to claim your reward.</p>
+
+        <div class="receipt-actions">
+          <button class="btn-ghost" id="receiptPrint">🖨️ Print</button>
+          <button class="btn-primary" id="receiptClose">Done</button>
+        </div>
+      </div>
+    </div>
   </main>
 
   <script src="api.js"></script>
@@ -191,30 +239,21 @@
       }
     })();
 
-    // Hamburger menu
     (function() {
       const btn     = document.getElementById('hamburgerBtn');
       const sidebar = document.getElementById('sidebar');
       const overlay = document.getElementById('sidebarOverlay');
-
       function openSidebar() {
-        sidebar.classList.add('open');
-        overlay.classList.add('active');
-        btn.classList.add('open');
-        document.body.style.overflow = 'hidden';
+        sidebar.classList.add('open'); overlay.classList.add('active');
+        btn.classList.add('open'); document.body.style.overflow = 'hidden';
       }
       function closeSidebar() {
-        sidebar.classList.remove('open');
-        overlay.classList.remove('active');
-        btn.classList.remove('open');
-        document.body.style.overflow = '';
+        sidebar.classList.remove('open'); overlay.classList.remove('active');
+        btn.classList.remove('open'); document.body.style.overflow = '';
       }
-
       btn.addEventListener('click', openSidebar);
       overlay.addEventListener('click', closeSidebar);
-      document.querySelectorAll('.nav-item').forEach(link => {
-        link.addEventListener('click', closeSidebar);
-      });
+      document.querySelectorAll('.nav-item').forEach(l => l.addEventListener('click', closeSidebar));
     })();
   </script>
 </body>

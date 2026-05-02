@@ -57,6 +57,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   // ── Modal events ──
   document.getElementById('modalCancel').addEventListener('click', closeModal);
   document.getElementById('modalConfirm').addEventListener('click', confirmRedeem);
+  document.getElementById('receiptClose').addEventListener('click', closeReceipt);
+  document.getElementById('receiptPrint').addEventListener('click', () => window.print());
 });
 
 // ─────────────────────────────────────────
@@ -83,16 +85,16 @@ async function loadHistory() {
       </thead>
       <tbody>
         ${histData.history.map(h => {
-          const name   = escHtml(h.rewardName   || h.reward_name  || '—');
-          const pts    = h.pointsUsed            ?? h.points_used  ?? '—';
-          const date   = formatDate(h.redeemedAt || h.redeemed_at || h.createdAt || h.created_at);
+          const name   = escHtml(h.reward_name  || h.rewardName  || '—');
+          const pts    = h.points_spent          ?? h.pointsUsed  ?? h.points_used ?? '—';
+          const date   = formatDate(h.redeemed_at || h.redeemedAt || h.created_at);
           const status = (h.status || 'pending').toLowerCase();
           return `
             <tr>
               <td>${name}</td>
-              <td>${pts}</td>
+              <td>${pts} pts</td>
               <td>${date}</td>
-              <td><span class="status-badge status-${status}">${h.status || 'Pending'}</span></td>
+              <td><span class="status-badge status-${status}">${capitalize(h.status || 'Pending')}</span></td>
             </tr>
           `;
         }).join('')}
@@ -102,7 +104,7 @@ async function loadHistory() {
 }
 
 // ─────────────────────────────────────────
-// Modal
+// Confirm Modal
 // ─────────────────────────────────────────
 function openRedeemModal(id, name, cost) {
   selectedRewardId   = id;
@@ -129,14 +131,45 @@ async function confirmRedeem() {
   if (data && data.success) {
     currentBalance -= selectedRewardCost;
     setEl('balanceDisplay', `${currentBalance} pts`);
-    alert(`✓ Redeemed: ${selectedRewardName}! Show this to your coordinator.`);
-    location.reload();
+    showReceipt(selectedRewardName, selectedRewardCost);
+    await loadHistory();
   } else {
     alert(data?.message || 'Redemption failed. Please try again.');
   }
 
   btn.disabled    = false;
   btn.textContent = 'Redeem Now';
+}
+
+// ─────────────────────────────────────────
+// Receipt Modal
+// ─────────────────────────────────────────
+function showReceipt(rewardName, pointsUsed) {
+  const user = JSON.parse(localStorage.getItem('stars_user') || '{}');
+  const now  = new Date();
+  const ref  = 'STARS-' + now.getFullYear()
+    + String(now.getMonth()+1).padStart(2,'0')
+    + String(now.getDate()).padStart(2,'0')
+    + '-' + Math.random().toString(36).substr(2,6).toUpperCase();
+
+  const dateStr = now.toLocaleDateString('en-PH', {
+    year: 'numeric', month: 'long', day: 'numeric',
+    hour: '2-digit', minute: '2-digit'
+  });
+
+  document.getElementById('rcptRef').textContent    = ref;
+  document.getElementById('rcptDate').textContent   = dateStr;
+  document.getElementById('rcptName').textContent   = user.full_name   || '—';
+  document.getElementById('rcptId').textContent     = user.student_id  || '—';
+  document.getElementById('rcptReward').textContent = rewardName;
+  document.getElementById('rcptPts').textContent    = pointsUsed + ' pts';
+  document.getElementById('rcptBal').textContent    = currentBalance + ' pts';
+
+  document.getElementById('receiptModal').style.display = 'flex';
+}
+
+function closeReceipt() {
+  document.getElementById('receiptModal').style.display = 'none';
 }
 
 // ─────────────────────────────────────────
@@ -160,4 +193,8 @@ function escHtml(str) {
 function setEl(id, val) {
   const el = document.getElementById(id);
   if (el) el.textContent = val;
+}
+
+function capitalize(s) {
+  return String(s).charAt(0).toUpperCase() + String(s).slice(1);
 }
