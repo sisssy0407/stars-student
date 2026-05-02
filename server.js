@@ -276,12 +276,17 @@ app.post('/api/submissions', authMiddleware, upload.single('proof'), async (req,
     }
 
     const proof_path = req.file ? req.file.filename : null;
-    await db.query(
-      `INSERT INTO submissions
-        (student_id, category_id, title, description, points_requested, proof_path, status)
-       VALUES (?, ?, ?, ?, ?, ?, 'pending')`,
-      [student_id, category_id, title, description || '', points_requested, proof_path]
-    );
+const [catRows] = await db.query(
+  'SELECT category_name FROM categories WHERE id = ?', [category_id]
+);
+const category_name = catRows.length > 0 ? catRows[0].category_name : null;
+
+await db.query(
+  `INSERT INTO submissions
+    (student_id, category_id, category_name, title, description, points_requested, proof_path, status)
+   VALUES (?, ?, ?, ?, ?, ?, ?, 'pending')`,
+  [student_id, category_id, category_name, title, description || '', points_requested, proof_path]
+);
     res.json({ success: true, message: 'Submission received!' });
   } catch (err) {
     console.error(err);
