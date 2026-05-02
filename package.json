@@ -20,10 +20,12 @@
   },
   "homepage": "https://github.com/sisssy0407/stars-student#readme",
   "dependencies": {
+    "cloudinary": "^1.41.3",
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
     "multer": "^2.1.1",
+    "multer-storage-cloudinary": "^4.0.0",
     "mysql2": "^3.22.3",
     "nodemailer": "^8.0.7",
     "resend": "^6.12.2"
