@@ -6,8 +6,8 @@ const API_BASE = 'https://stars-student.onrender.com/api';
 
 const api = {
 
-async login(email, password) {
-      try {
+  async login(email, password) {
+    try {
       const res = await fetch(`${API_BASE}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -15,7 +15,6 @@ async login(email, password) {
       });
       const data = await res.json();
       if (data.success) {
-        // ✅ FIX: Save the actual JWT token, not a literal string
         localStorage.setItem('stars_token', data.token);
         return {
           success: true,
@@ -80,28 +79,23 @@ async login(email, password) {
         headers: this._auth()
       });
       const data = await res.json();
+      if (data.success) {
+        return {
+          success: true,
+          balance: data.total ?? 0,
+          categories: data.categories || []
+        };
+      }
       return {
         success: true,
-        balance: data.total || 0,
-        categories: data.categories || [
-          { category_code: 'SCHOLAR',  points_earned: 0 },
-          { category_code: 'PUNCTUAL', points_earned: 0 },
-          { category_code: 'ACHIEVER', points_earned: 0 },
-          { category_code: 'ENGAGE',   points_earned: 0 },
-          { category_code: 'GENERAL',  points_earned: 0 }
-        ]
+        balance: 0,
+        categories: []
       };
     } catch {
       return {
         success: true,
         balance: 0,
-        categories: [
-          { category_code: 'SCHOLAR',  points_earned: 0 },
-          { category_code: 'PUNCTUAL', points_earned: 0 },
-          { category_code: 'ACHIEVER', points_earned: 0 },
-          { category_code: 'ENGAGE',   points_earned: 0 },
-          { category_code: 'GENERAL',  points_earned: 0 }
-        ]
+        categories: []
       };
     }
   },
@@ -114,7 +108,6 @@ async login(email, password) {
       });
       const data = await res.json();
 
-      // ✅ FIX: Handle both { success, submissions } and plain array
       const list = Array.isArray(data)
         ? data
         : Array.isArray(data.submissions)
@@ -150,18 +143,16 @@ async login(email, password) {
 
   async getRewards() {
     try {
-      const res = await fetch(`${API_BASE}/rewards`, {
-        headers: this._auth()
-      });
+      // ✅ No auth needed — public endpoint
+      const res = await fetch(`${API_BASE}/rewards`);
       const data = await res.json();
 
-      // ✅ FIX: Handle both plain array and wrapped response
       const list = Array.isArray(data) ? data : Array.isArray(data.rewards) ? data.rewards : [];
 
       const normalized = list.map(r => ({
-        reward_id:       r.rewardId       || r.reward_id       || r.id,
-        reward_name:     r.rewardName     || r.reward_name     || r.name     || '—',
-        points_required: r.pointsRequired ?? r.points_required ?? r.cost     ?? 0,
+        reward_id:       r.reward_id       || r.rewardId       || r.id,
+        reward_name:     r.reward_name     || r.rewardName     || r.name     || '—',
+        points_required: r.points_required ?? r.pointsRequired ?? r.cost     ?? 0,
         description:     r.description    || '',
         stock:           r.stock          ?? 0
       }));
@@ -201,28 +192,27 @@ async login(email, password) {
         headers: this._auth()
       });
       const data = await res.json();
-      const list = Array.isArray(data) ? data : [];
+      const list = Array.isArray(data) ? data : Array.isArray(data.history) ? data.history : [];
       return { success: true, history: list };
     } catch {
       return { success: false, history: [] };
     }
   },
 
-  // ── Rankings ──
   async getRanking(year) {
-  try {
-    const url = year
-      ? `${API_BASE}/ranking?year=${year}`
-      : `${API_BASE}/ranking`;
-    const res  = await fetch(url, { headers: this._auth() });
-    const data = await res.json();
-    const list = Array.isArray(data) ? data : 
-                 Array.isArray(data.ranking) ? data.ranking : [];
-    return { success: true, ranking: list };
-  } catch {
-    return { success: false, ranking: [] };
-  }
-},
+    try {
+      const url = year
+        ? `${API_BASE}/ranking?year=${year}`
+        : `${API_BASE}/ranking`;
+      const res  = await fetch(url, { headers: this._auth() });
+      const data = await res.json();
+      const list = Array.isArray(data) ? data :
+                   Array.isArray(data.ranking) ? data.ranking : [];
+      return { success: true, ranking: list };
+    } catch {
+      return { success: false, ranking: [] };
+    }
+  },
 
   _auth() {
     return { 'Authorization': `Bearer ${localStorage.getItem('stars_token')}` };

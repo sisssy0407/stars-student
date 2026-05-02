@@ -210,8 +210,8 @@ app.get('/api/points/:student_id', authMiddleware, async (req, res) => {
   }
 });
 
-// ✅ GET /api/submissions/:student_id
-app.get('/api/submissions/:student_id', authMiddleware, async (req, res) => {
+// ✅ GET /api/submissions/student/:student_id
+app.get('/api/submissions/student/:student_id', authMiddleware, async (req, res) => {
   try {
     const [rows] = await db.query(
       `SELECT s.id, s.title, s.description, s.points_requested, s.points_awarded,
@@ -277,8 +277,8 @@ app.post('/api/submissions', authMiddleware, upload.single('proof'), async (req,
   }
 });
 
-// ✅ GET /api/rewards
-app.get('/api/rewards', authMiddleware, async (req, res) => {
+// ✅ GET /api/rewards — NO AUTH (public)
+app.get('/api/rewards', async (req, res) => {
   try {
     const [rows] = await db.query(
       'SELECT * FROM rewards WHERE is_active = 1 ORDER BY points_required ASC'
@@ -353,7 +353,8 @@ app.get('/api/rewards/history/:student_id', authMiddleware, async (req, res) => 
 });
 
 // ✅ GET /api/ranking
-app.get('/api/ranking', async (req, res) => {  try {
+app.get('/api/ranking', async (req, res) => {
+  try {
     const { year } = req.query;
     let query = `
       SELECT s.student_id, s.full_name, s.program, s.year_level, s.block,
