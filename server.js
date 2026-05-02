@@ -357,6 +357,12 @@ app.post('/api/rewards/redeem', authMiddleware, async (req, res) => {
       [student_id, reward.points_required, `Redeemed: ${reward.name}`]
     );
 
+    // ✅ I-update ang students.points para makita sa Java admin
+    await db.query(
+      `UPDATE students SET points = points - ? WHERE student_id = ?`,
+      [reward.points_required, student_id]
+    );
+
     res.json({ success: true, message: 'Reward redeemed! Show this to your coordinator.' });
   } catch (err) {
     console.error(err);
