@@ -281,7 +281,8 @@ app.post('/api/submissions', authMiddleware, upload.single('proof'), async (req,
 app.get('/api/rewards', async (req, res) => {
   try {
     const [rows] = await db.query(
-      'SELECT * FROM rewards WHERE is_active = 1 ORDER BY points_required ASC'
+      `SELECT reward_id, name AS reward_name, description, points_required, stock, is_active
+       FROM rewards WHERE is_active = 1 ORDER BY points_required ASC`
     );
     res.json({ success: true, rewards: rows });
   } catch (err) {
@@ -312,8 +313,7 @@ app.post('/api/rewards/redeem', authMiddleware, async (req, res) => {
     const balance = totRows[0].total;
 
     const [existing] = await db.query(
-      `SELECT id FROM redemptions
-       WHERE student_id = ? AND reward_id = ? AND claimed = 0`,
+      `SELECT id FROM redemptions WHERE student_id = ? AND reward_id = ? AND claimed = 0`,
       [student_id, rewardId]
     );
     if (existing.length > 0)
@@ -323,9 +323,11 @@ app.post('/api/rewards/redeem', authMiddleware, async (req, res) => {
       return res.json({ success: false, message: 'Not enough points.' });
 
     await db.query(
-      'INSERT INTO redemptions (student_id, reward_id) VALUES (?, ?)',
-      [student_id, rewardId]
+      `INSERT INTO redemptions (student_id, reward_id, reward_name, points_spent, status)
+       VALUES (?, ?, ?, ?, 'pending')`,
+      [student_id, rewardId, reward.name, reward.points_required]
     );
+
     res.json({ success: true, message: 'Reward redeemed! Show this to your coordinator.' });
   } catch (err) {
     console.error(err);
@@ -337,10 +339,8 @@ app.post('/api/rewards/redeem', authMiddleware, async (req, res) => {
 app.get('/api/rewards/history/:student_id', authMiddleware, async (req, res) => {
   try {
     const [rows] = await db.query(
-      `SELECT r.reward_name, r.points_required,
-              rd.redeemed_at, rd.claimed
+      `SELECT rd.reward_name, rd.points_spent, rd.redeemed_at, rd.claimed, rd.status
        FROM redemptions rd
-       JOIN rewards r ON rd.reward_id = r.reward_id
        WHERE rd.student_id = ?
        ORDER BY rd.redeemed_at DESC`,
       [req.params.student_id]
