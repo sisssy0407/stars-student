@@ -10,6 +10,8 @@ const cors       = require('cors');
 const multer     = require('multer');
 const path       = require('path');
 const fs         = require('fs');
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
 const app  = express();
 const PORT = process.env.PORT || 8081;
@@ -26,29 +28,25 @@ app.use(express.static('.'));
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
-app.use('/uploads', express.static('uploads'));
+
+
+
+// ---- CLOUDINARY CONFIG ----
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key:    process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
 // ---- FILE UPLOAD ----
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const dir = 'uploads';
-    if (!fs.existsSync(dir)) fs.mkdirSync(dir);
-    cb(null, dir);
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`);
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: 'stars-proof',
+    allowed_formats: ['jpg', 'jpeg', 'png', 'pdf']
   }
 });
-const upload = multer({
-  storage,
-  limits: { fileSize: 5 * 1024 * 1024 },
-  fileFilter: (req, file, cb) => {
-    const allowed = ['.jpg', '.jpeg', '.png', '.pdf'];
-    const ext = path.extname(file.originalname).toLowerCase();
-    if (allowed.includes(ext)) cb(null, true);
-    else cb(new Error('Invalid file type.'));
-  }
-});
+const upload = multer({ storage, limits: { fileSize: 5 * 1024 * 1024 } });
 
 // ---- DATABASE ----
 const db = mysql.createPool({
@@ -275,7 +273,7 @@ app.post('/api/submissions', authMiddleware, upload.single('proof'), async (req,
       );
     }
 
-    const proof_path = req.file ? req.file.filename : null;
+    const proof_path = req.file ? req.file.path : null;
 const [catRows] = await db.query(
   'SELECT category_name FROM categories WHERE id = ?', [category_id]
 );
