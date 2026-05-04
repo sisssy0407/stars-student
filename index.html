@@ -5,226 +5,473 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>STARS — Login</title>
   <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-</head>
-<body class="login-page">
-
-  <div class="login-bg">
-    <div class="orb orb1"></div>
-  </div>
-
-  <!-- Left branding panel -->
-  <div class="login-panel">
-    <div class="panel-content">
-      <h2 class="panel-title">Recognize.<br>Reward.<br>Achieve.</h2>
-      <p class="panel-sub">CCS College of Computer Studies<br>Student Tracking & Rewards System</p>
-      <div class="panel-badges">
-        <span class="panel-badge">📚 Scholar Track</span>
-        <span class="panel-badge">⏰ Punctual Pass</span>
-        <span class="panel-badge">🏆 Achievers Mark</span>
-        <span class="panel-badge">🤝 Engage Badge</span>
-        <span class="panel-badge">🔍 Lost & Found</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- Right form panel -->
-  <div class="login-container">
-    <div class="login-brand">
-      <span class="brand-star">★</span>
-      <h1>STARS</h1>
-      <p>Student Tracking &amp; Rewards System</p>
-    </div>
-
-    <!-- Mobile badges -->
-    <div class="mobile-badges">
-      <span class="mobile-badge">📚 Scholar Track</span>
-      <span class="mobile-badge">⏰ Punctual Pass</span>
-      <span class="mobile-badge">🏆 Achievers Mark</span>
-      <span class="mobile-badge">🤝 Engage Badge</span>
-      <span class="mobile-badge">🔍 Lost & Found</span>
-    </div>
-
-    <!-- Tabs -->
-    <div class="auth-tabs">
-  <button class="auth-tab active">Sign In</button>
-</div>
-
-    <!-- LOGIN FORM -->
-    <form class="login-form" id="loginForm">
-      <div class="form-group">
-        <label for="email">School Email</label>
-<input type="email" id="email" placeholder="e.g. 202100123@gordoncollege.edu.ph" required />
-      </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" placeholder="Enter your password" required />
-      </div>
-      <div class="form-error" id="loginError"></div>
-      <button type="submit" class="btn-primary" id="loginBtn">Sign In →</button>
-    </form>
-
-    <!-- REGISTER FORM -->
-    <form class="login-form" id="registerForm" style="display:none">
-
-      <div class="form-group">
-        <label for="regName">Full Name</label>
-        <input type="text" id="regName" placeholder="e.g. Juan Dela Cruz" required />
-      </div>
-
-      <div class="form-group">
-        <label for="regStudentId">Student ID</label>
-        <!-- AUTO-FILL: oninput triggers autoFillEmail() -->
-        <input type="text" id="regStudentId" placeholder="e.g. 2021-00123" required oninput="autoFillEmail(this.value)" />
-      </div>
-
-      <div class="form-group">
-        <label for="regEmail">School Email</label>
-        <!-- readonly: hindi na mababago ng user, auto-filled lang -->
-        <input type="email" id="regEmail" placeholder="Auto-filled from Student ID" required readonly
-          style="background: #f5f5f5; color: #888; cursor: not-allowed;" />
-      </div>
-
-      <!-- Program + Year Level (2 columns) -->
-      <div class="form-row">
-        <div class="form-group">
-          <label for="regProgram">Program</label>
-          <select id="regProgram" required>
-            <option value="" disabled selected>Select program</option>
-            <option value="BSIT">BSIT</option>
-            <option value="BSCS">BSCS</option>
-            <option value="BSEMC">BSEMC</option>
-            <option value="ACT">ACT</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="regYear">Year Level</label>
-          <select id="regYear" required>
-            <option value="" disabled selected>Select year</option>
-            <option value="1">1st Year</option>
-            <option value="2">2nd Year</option>
-            <option value="3">3rd Year</option>
-            <option value="4">4th Year</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="regBlock">Block</label>
-        <input type="text" id="regBlock" placeholder="e.g. A, B, 3A" required />
-      </div>
-
-      <div class="form-group">
-        <label for="regPassword">Password</label>
-        <input type="password" id="regPassword" placeholder="Create a password (min. 6 characters)" required />
-      </div>
-
-      <div class="form-error" id="registerError"></div>
-      <div class="form-success" id="registerSuccess"></div>
-      <button type="submit" class="btn-primary" id="registerBtn">Create Account →</button>
-    </form>
-
-    <p class="login-footer">CCS — College of Computer Studies</p>
-  </div>
-
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
   <style>
-    .login-page {
-      flex-direction: row;
-      align-items: stretch;
-      padding: 0;
-      overflow: hidden;
-      height: 100vh;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange: #EE781C;
+      --orange-light: #FF9A3C;
+      --navy-deep: #060c2e;
+      --navy-mid: #0b1240;
+      --navy-card: #0e1650;
+      --navy-input: #0a1038;
+      --font-display: 'Syne', sans-serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
     }
-    .login-panel {
-      flex: 1;
-      background: linear-gradient(145deg, var(--slate) 0%, var(--slate2) 100%);
+
+    body {
+      font-family: var(--font-body);
+      min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 60px 56px;
+      background: var(--navy-deep);
+      overflow: hidden;
       position: relative;
+    }
+
+    /* ── ANIMATED BACKGROUND ── */
+    .bg-wrap {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background: radial-gradient(ellipse 120% 100% at 50% 0%, #0d1a6e 0%, #060c2e 60%);
       overflow: hidden;
     }
-    .login-panel::before {
-      content: '★';
+
+    /* Dot grid */
+    .bg-wrap::before {
+      content: '';
       position: absolute;
-      font-size: 480px;
-      color: rgba(242,101,34,0.05);
-      top: -80px; right: -80px;
-      font-family: var(--font-display);
-      line-height: 1;
+      inset: 0;
+      background-image: radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1px);
+      background-size: 28px 28px;
+      opacity: 0.6;
+    }
+
+    /* Diagonal light streaks */
+    .bg-streak {
+      position: absolute;
+      width: 2px;
+      background: linear-gradient(to bottom, transparent, rgba(99,130,255,0.18), transparent);
+      transform: rotate(-30deg);
+      transform-origin: top center;
+    }
+    .bg-streak:nth-child(1) { height: 60vh; top: -10vh; left: 10%; }
+    .bg-streak:nth-child(2) { height: 80vh; top: -20vh; left: 30%; opacity: 0.5; }
+    .bg-streak:nth-child(3) { height: 50vh; top: 10vh; left: 60%; opacity: 0.4; }
+    .bg-streak:nth-child(4) { height: 70vh; top: -5vh; left: 80%; opacity: 0.3; }
+
+    /* Glow orbs */
+    .bg-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
       pointer-events: none;
     }
-    .panel-content { position: relative; z-index: 1; max-width: 420px; }
-
-    .panel-title {
-      font-family: var(--font-display);
-      font-size: clamp(50px, 3.5vw, 56px);
-      font-weight: 800;
-      line-height: 1.05;
-      color: var(--white);
-      margin-bottom: 20px;
-      background: linear-gradient(135deg, var(--white) 0%, var(--yellow2) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      white-space: nowrap;
+    .bg-orb-1 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(30,60,200,0.25) 0%, transparent 70%);
+      top: -150px; left: -100px;
     }
-    .panel-sub {
-      color: rgba(255,255,255,0.45);
-      font-size: 13px;
-      line-height: 1.7;
-      margin-bottom: 36px;
+    .bg-orb-2 {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(238,120,28,0.08) 0%, transparent 70%);
+      bottom: -100px; right: -50px;
+    }
+    .bg-orb-3 {
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(60,80,220,0.2) 0%, transparent 70%);
+      bottom: 10%; left: 20%;
+    }
+
+    /* Purple border frame effect (from image) */
+    .bg-frame {
+      position: fixed;
+      inset: 8px;
+      border: 1.5px solid rgba(120,80,220,0.35);
+      border-radius: 20px;
+      pointer-events: none;
+      z-index: 0;
+      box-shadow: 0 0 60px rgba(100,60,200,0.15), inset 0 0 60px rgba(100,60,200,0.08);
+    }
+
+    /* ── MAIN CARD ── */
+    .login-card {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      width: min(900px, calc(100vw - 48px));
+      min-height: 520px;
+      border-radius: 20px;
+      overflow: hidden;
+      background: rgba(10, 16, 60, 0.85);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow:
+        0 40px 120px rgba(0,0,0,0.6),
+        0 0 0 1px rgba(255,255,255,0.04),
+        inset 0 1px 0 rgba(255,255,255,0.06);
+      backdrop-filter: blur(20px);
+    }
+
+    /* ── LEFT PANEL (branding) ── */
+    .brand-panel {
+      flex: 0 0 42%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 36px;
+      background: linear-gradient(160deg, rgba(15,25,90,0.9) 0%, rgba(8,14,50,0.95) 100%);
+      border-right: 1px solid rgba(255,255,255,0.07);
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    /* Subtle radial rings behind logo */
+    .brand-panel::before {
+      content: '';
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.04);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 0 60px rgba(255,255,255,0.015), 0 0 0 120px rgba(255,255,255,0.008);
+    }
+
+    /* Shield / Logo */
+    .shield-wrap {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .shield-svg {
+      width: 120px;
+      height: auto;
+      filter: drop-shadow(0 8px 32px rgba(238,120,28,0.35));
+    }
+
+    .college-name {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: 2px;
+      line-height: 1.15;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+
+    .college-sub {
+      font-size: 11px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.45);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 24px;
+    }
+
+    /* Orange divider under subtitle */
+    .brand-divider {
+      width: 40px;
+      height: 2px;
+      background: var(--orange);
+      border-radius: 2px;
+      margin: 0 auto 24px;
+    }
+
+    .brand-tagline {
+      font-size: 14.5px;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.8;
+      letter-spacing: 0.2px;
+    }
+
+    /* ── DIVIDER ── */
+    .card-divider {
+      width: 1px;
+      background: linear-gradient(to bottom, transparent 5%, rgba(255,255,255,0.1) 30%, rgba(255,255,255,0.1) 70%, transparent 95%);
+      flex-shrink: 0;
+    }
+
+    /* ── RIGHT PANEL (form) ── */
+    .form-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 44px 48px;
+      position: relative;
+    }
+
+    /* STARS heading */
+    .stars-title {
+      font-family: var(--font-display);
+      font-size: 54px;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: 6px;
+      line-height: 1;
+      text-align: center;
+      margin-bottom: 4px;
+    }
+
+    /* ADMIN PANEL label */
+    .admin-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .admin-label-line {
+      flex: 1;
+      max-width: 70px;
+      height: 1.5px;
+      background: var(--orange);
+      border-radius: 2px;
+    }
+
+    .admin-label span {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 3px;
+      color: var(--orange);
+      text-transform: uppercase;
+    }
+
+    /* FORM */
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      font-size: 11px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.6);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+
+    /* Input wrapper with icon */
+    .input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 16px;
+      color: rgba(255,255,255,0.3);
+      display: flex;
+      align-items: center;
+      pointer-events: none;
+    }
+
+    .input-icon svg { width: 16px; height: 16px; }
+
+    .login-form input[type="email"],
+    .login-form input[type="password"],
+    .login-form input[type="text"],
+    .login-form select {
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border: 1.5px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      color: #fff;
+      font-family: var(--font-body);
+      font-size: 14px;
+      padding: 13px 16px 13px 44px;
+      transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+
+    .login-form input::placeholder { color: rgba(255,255,255,0.25); }
+
+    .login-form input:focus,
+    .login-form select:focus {
+      border-color: rgba(255,255,255,0.35);
+      background: rgba(255,255,255,0.08);
+      box-shadow: 0 0 0 3px rgba(255,255,255,0.05);
+    }
+
+    /* Eye toggle for password */
+    .eye-toggle {
+      position: absolute;
+      right: 14px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: rgba(255,255,255,0.3);
+      display: flex;
+      align-items: center;
+      padding: 4px;
+      transition: color 0.2s;
+    }
+    .eye-toggle:hover { color: rgba(255,255,255,0.6); }
+    .eye-toggle svg { width: 16px; height: 16px; }
+
+    /* Remember me + forgot */
+    .form-extras {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .remember-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+
+    .remember-wrap input[type="checkbox"] {
+      width: 15px;
+      height: 15px;
+      background: rgba(255,255,255,0.08);
+      border: 1.5px solid rgba(255,255,255,0.2);
+      border-radius: 4px;
+      accent-color: var(--orange);
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .remember-wrap span {
+      font-size: 12.5px;
+      color: rgba(255,255,255,0.5);
       font-weight: 500;
     }
-    .panel-badges { display: flex; flex-wrap: wrap; gap: 8px; }
-    .panel-badge {
-      background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(255,255,255,0.12);
-      color: rgba(255,255,255,0.7);
-      padding: 6px 14px;
-      border-radius: 99px;
+
+    .forgot-link {
+      font-size: 12.5px;
+      color: var(--orange);
+      font-weight: 600;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+    .forgot-link:hover { opacity: 0.75; }
+
+    /* SIGN IN BUTTON */
+    .btn-signin {
+      background: linear-gradient(135deg, #EE781C 0%, #FF9840 60%, #FFB347 100%);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-family: var(--font-body);
+      font-size: 15px;
+      font-weight: 800;
+      padding: 14px 24px;
+      cursor: pointer;
+      width: 100%;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      box-shadow: 0 6px 28px rgba(238,120,28,0.4);
+      transition: opacity 0.2s, transform 0.1s, box-shadow 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-signin:hover {
+      opacity: 0.92;
+      box-shadow: 0 8px 36px rgba(238,120,28,0.55);
+    }
+    .btn-signin:active { transform: scale(0.98); }
+    .btn-signin:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
+    .btn-signin svg { width: 18px; height: 18px; }
+
+    /* ERROR / SUCCESS */
+    .form-error {
+      color: #f87171;
+      font-size: 12px;
+      min-height: 16px;
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+    .form-success {
+      color: #4ade80;
+      font-size: 12px;
+      min-height: 16px;
+      font-weight: 500;
+    }
+
+    /* ── BOTTOM STRIP ── */
+    .bottom-strip {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: 16px 48px;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      background: rgba(0,0,0,0.15);
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+    }
+
+    .strip-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255,255,255,0.35);
       font-size: 12px;
       font-weight: 600;
       letter-spacing: 0.3px;
     }
-    .login-container {
-      width: 480px;
-      min-width: 480px;
-      border-radius: 0;
-      box-shadow: none;
-      border-left: 1px solid var(--gray2);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 28px 52px;
-      background: var(--white);
-      overflow-y: auto;
-      min-height: 100vh;
+    .strip-item svg { width: 16px; height: 16px; opacity: 0.7; }
+
+    .strip-sep {
+      width: 1px;
+      height: 20px;
+      background: rgba(255,255,255,0.1);
     }
-    /* Compact brand */
-    .login-brand { margin-bottom: 6px; }
-    .login-brand h1 { font-size: 24px; margin-bottom: 0; }
-    .login-brand p  { font-size: 11px; margin: 0; }
-    .form-group { margin-bottom: 7px !important; }
-    .form-group label { font-size: 11px !important; margin-bottom: 2px !important; display: block; }
-    .login-form input, .login-form select { padding: 7px 12px !important; font-size: 13px !important; }
-    .auth-tabs { margin-bottom: 10px; }
-    .form-row { gap: 8px; }
-    .login-form { gap: 0 !important; }
-    .btn-primary { margin-top: 8px; padding: 10px !important; }
-    .login-footer { margin-top: 8px; font-size: 11px; }
-    .login-bg { display: none; }
-    .mobile-badges { display: none; }
+
+    /* form panel needs bottom padding for strip */
+    .form-panel { padding-bottom: 80px; }
+
+    /* ── REGISTER FORM extras ── */
+    .login-form select {
+      padding-left: 16px;
+      color: rgba(255,255,255,0.7);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      appearance: none;
+    }
+    .login-form select option { background: #0d1136; color: #fff; }
+    .login-form input[readonly] {
+      background: rgba(255,255,255,0.03);
+      color: rgba(255,255,255,0.3);
+      cursor: not-allowed;
+      border-color: rgba(255,255,255,0.06);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
 
     /* TABS */
     .auth-tabs {
       display: flex;
       gap: 0;
-      margin-bottom: 24px;
-      border-bottom: 2px solid var(--gray2);
+      margin-bottom: 22px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
     }
     .auth-tab {
       flex: 1;
@@ -232,91 +479,282 @@
       border: none;
       padding: 10px 0;
       font-family: var(--font-body);
-      font-size: 14px;
+      font-size: 12px;
       font-weight: 700;
-      color: var(--gray);
+      color: rgba(255,255,255,0.3);
       cursor: pointer;
       border-bottom: 2px solid transparent;
-      margin-bottom: -2px;
+      margin-bottom: -1px;
       transition: color 0.2s, border-color 0.2s;
-      letter-spacing: 0.3px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
     }
     .auth-tab.active {
       color: var(--orange);
       border-bottom-color: var(--orange);
     }
 
-    /* 2-column row for program + year */
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    /* Select styling */
-    select {
-      width: 100%;
-      padding: 10px 14px;
-      border: 1.5px solid var(--gray2);
-      border-radius: var(--radius-sm);
-      font-family: var(--font-body);
-      font-size: 14px;
-      color: var(--slate);
-      background: var(--white);
-      cursor: pointer;
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 14px center;
-      transition: border-color 0.2s;
-    }
-    select:focus {
-      outline: none;
-      border-color: var(--orange);
-    }
-    select option[value=""][disabled] { color: var(--gray); }
-
-    @media (max-width: 800px) {
-      .login-page {
-        flex-direction: column;
-        height: auto;
-        min-height: 100vh;
-        overflow-y: auto;
-      }
-      .login-panel { display: none; }
-      .login-container {
-        width: 100%;
-        min-width: unset;
-        border-left: none;
-        padding: 48px 28px 60px;
-        min-height: unset;
-        border-radius: 0;
-        justify-content: flex-start;
-        overflow-y: visible;
-      }
-      .mobile-badges {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-bottom: 28px;
-      }
-      .mobile-badge {
-        background: var(--orange-dim);
-        border: 1px solid rgba(242,101,34,0.2);
-        color: var(--orange);
-        padding: 6px 14px;
-        border-radius: 99px;
-        font-size: 12px;
-        font-weight: 600;
-        letter-spacing: 0.3px;
-      }
-      .form-row {
-        grid-template-columns: 1fr;
-      }
+    /* ── RESPONSIVE ── */
+    @media (max-width: 700px) {
+      .brand-panel { display: none; }
+      .card-divider { display: none; }
+      .login-card { width: calc(100vw - 32px); }
+      .form-panel { padding: 40px 28px 80px; }
+      .form-row { grid-template-columns: 1fr; }
+      .bottom-strip { padding: 16px 28px; }
     }
   </style>
+</head>
+<body>
+
+  <!-- Background -->
+  <div class="bg-wrap">
+    <div class="bg-streak"></div>
+    <div class="bg-streak"></div>
+    <div class="bg-streak"></div>
+    <div class="bg-streak"></div>
+    <div class="bg-orb bg-orb-1"></div>
+    <div class="bg-orb bg-orb-2"></div>
+    <div class="bg-orb bg-orb-3"></div>
+  </div>
+  <div class="bg-frame"></div>
+
+  <!-- MAIN CARD -->
+  <div class="login-card">
+
+    <!-- LEFT: Branding -->
+    <div class="brand-panel">
+      <div class="shield-wrap">
+        <!-- Gordon College Shield SVG -->
+        <svg class="shield-svg" viewBox="0 0 120 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Shield shape -->
+          <path d="M60 4 L110 24 L110 70 C110 102 60 136 60 136 C60 136 10 102 10 70 L10 24 Z" fill="#0f2080" stroke="#EE781C" stroke-width="3"/>
+          <!-- Inner shield border -->
+          <path d="M60 14 L100 30 L100 68 C100 96 60 126 60 126 C60 126 20 96 20 68 L20 30 Z" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+          <!-- Laurel left -->
+          <g opacity="0.85" fill="#EE781C">
+            <ellipse cx="28" cy="85" rx="5" ry="8" transform="rotate(-30 28 85)"/>
+            <ellipse cx="23" cy="74" rx="5" ry="8" transform="rotate(-20 23 74)"/>
+            <ellipse cx="21" cy="62" rx="5" ry="8" transform="rotate(-10 21 62)"/>
+            <ellipse cx="23" cy="50" rx="5" ry="8" transform="rotate(5 23 50)"/>
+          </g>
+          <!-- Laurel right -->
+          <g opacity="0.85" fill="#EE781C">
+            <ellipse cx="92" cy="85" rx="5" ry="8" transform="rotate(30 92 85)"/>
+            <ellipse cx="97" cy="74" rx="5" ry="8" transform="rotate(20 97 74)"/>
+            <ellipse cx="99" cy="62" rx="5" ry="8" transform="rotate(10 99 62)"/>
+            <ellipse cx="97" cy="50" rx="5" ry="8" transform="rotate(-5 97 50)"/>
+          </g>
+          <!-- Star at top -->
+          <polygon points="60,22 63,31 72,31 65,37 67,46 60,40 53,46 55,37 48,31 57,31" fill="white" opacity="0.95"/>
+          <!-- Book -->
+          <rect x="42" y="68" width="36" height="28" rx="3" fill="white" opacity="0.9"/>
+          <line x1="60" y1="68" x2="60" y2="96" stroke="#0f2080" stroke-width="2"/>
+          <line x1="46" y1="76" x2="58" y2="76" stroke="#0f2080" stroke-width="1.5"/>
+          <line x1="46" y1="82" x2="58" y2="82" stroke="#0f2080" stroke-width="1.5"/>
+          <line x1="46" y1="88" x2="58" y2="88" stroke="#0f2080" stroke-width="1.5"/>
+          <line x1="62" y1="76" x2="74" y2="76" stroke="#0f2080" stroke-width="1.5"/>
+          <line x1="62" y1="82" x2="74" y2="82" stroke="#0f2080" stroke-width="1.5"/>
+          <line x1="62" y1="88" x2="74" y2="88" stroke="#0f2080" stroke-width="1.5"/>
+        </svg>
+      </div>
+
+      <h2 class="college-name">Gordon<br>College</h2>
+      <p class="college-sub">College of Computer Studies</p>
+      <div class="brand-divider"></div>
+      <p class="brand-tagline">Empowering Students.<br>Rewarding Excellence.</p>
+    </div>
+
+    <!-- Divider -->
+    <div class="card-divider"></div>
+
+    <!-- RIGHT: Form -->
+    <div class="form-panel">
+
+      <div style="text-align:center; margin-bottom: 4px;">
+        <h1 class="stars-title">STARS</h1>
+      </div>
+      <div class="admin-label">
+        <div class="admin-label-line"></div>
+        <span id="panelLabel">Student Portal</span>
+        <div class="admin-label-line"></div>
+      </div>
+
+      <!-- TABS -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" onclick="switchTab('login')">Sign In</button>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <form class="login-form" id="loginForm">
+        <div class="form-group">
+          <label for="email">Username</label>
+          <div class="input-wrap">
+            <span class="input-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+              </svg>
+            </span>
+            <input type="email" id="email" placeholder="Enter your username" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="input-wrap">
+            <span class="input-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+            </span>
+            <input type="password" id="password" placeholder="Enter your password" required />
+            <button type="button" class="eye-toggle" onclick="togglePassword('password', this)" tabindex="-1">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-extras">
+          <label class="remember-wrap">
+            <input type="checkbox" id="rememberMe" style="width:15px;height:15px;padding:0;" />
+            <span>Remember me</span>
+          </label>
+          <a href="#" class="forgot-link">Forgot password?</a>
+        </div>
+
+        <div class="form-error" id="loginError"></div>
+        <button type="submit" class="btn-signin" id="loginBtn">
+          Sign In
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </button>
+      </form>
+
+      <!-- REGISTER FORM (hidden by default, kept for logic) -->
+      <form class="login-form" id="registerForm" style="display:none">
+        <div class="form-group">
+          <label for="regName">Full Name</label>
+          <div class="input-wrap">
+            <span class="input-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+              </svg>
+            </span>
+            <input type="text" id="regName" placeholder="e.g. Juan Dela Cruz" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="regStudentId">Student ID</label>
+          <div class="input-wrap">
+            <span class="input-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="3" width="20" height="18" rx="2"/><line x1="8" y1="9" x2="16" y2="9"/><line x1="8" y1="13" x2="14" y2="13"/>
+              </svg>
+            </span>
+            <input type="text" id="regStudentId" placeholder="e.g. 2021-00123" required oninput="autoFillEmail(this.value)" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="regEmail">School Email</label>
+          <div class="input-wrap">
+            <span class="input-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+              </svg>
+            </span>
+            <input type="email" id="regEmail" placeholder="Auto-filled from Student ID" required readonly />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="regProgram">Program</label>
+            <select id="regProgram" required>
+              <option value="" disabled selected>Select program</option>
+              <option value="BSIT">BSIT</option>
+              <option value="BSCS">BSCS</option>
+              <option value="BSEMC">BSEMC</option>
+              <option value="ACT">ACT</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="regYear">Year Level</label>
+            <select id="regYear" required>
+              <option value="" disabled selected>Select year</option>
+              <option value="1">1st Year</option>
+              <option value="2">2nd Year</option>
+              <option value="3">3rd Year</option>
+              <option value="4">4th Year</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="regBlock">Block</label>
+          <div class="input-wrap">
+            <span class="input-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+              </svg>
+            </span>
+            <input type="text" id="regBlock" placeholder="e.g. A, B, 3A" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="regPassword">Password</label>
+          <div class="input-wrap">
+            <span class="input-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+            </span>
+            <input type="password" id="regPassword" placeholder="Create a password (min. 6 characters)" required />
+            <button type="button" class="eye-toggle" onclick="togglePassword('regPassword', this)" tabindex="-1">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="form-error" id="registerError"></div>
+        <div class="form-success" id="registerSuccess"></div>
+        <button type="submit" class="btn-signin" id="registerBtn">
+          Create Account
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </button>
+      </form>
+
+      <!-- Bottom feature strip -->
+      <div class="bottom-strip">
+        <div class="strip-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>
+          </svg>
+          <span>Student Tracking</span>
+        </div>
+        <div class="strip-sep"></div>
+        <div class="strip-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
+          <span>Reward System</span>
+        </div>
+        <div class="strip-sep"></div>
+        <div class="strip-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          <span>Secure &amp; Reliable</span>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- .login-card -->
 
   <script>
+    // ── Keep original logic intact ──
     const token = localStorage.getItem('stars_token');
     if (!token) localStorage.removeItem('stars_user');
   </script>
@@ -328,31 +766,31 @@
       const isLogin = tab === 'login';
       document.getElementById('loginForm').style.display    = isLogin ? 'flex' : 'none';
       document.getElementById('registerForm').style.display = isLogin ? 'none' : 'flex';
-      document.getElementById('tabLogin').classList.toggle('active', isLogin);
-      document.getElementById('tabRegister').classList.toggle('active', !isLogin);
+      document.getElementById('panelLabel').textContent = isLogin ? 'Student Portal' : 'Create Account';
+      document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+      event?.target?.classList.add('active');
     }
 
-    // ✅ AUTO-FILL EMAIL BASED ON STUDENT ID
     function autoFillEmail(studentId) {
-      const stripped = studentId.replace(/-/g, ''); // tanggalin lahat ng dash
+      const stripped = studentId.replace(/-/g, '');
       const emailField = document.getElementById('regEmail');
-      if (stripped) {
-        emailField.value = stripped + '@gordoncollege.edu.ph';
-      } else {
-        emailField.value = '';
-      }
+      emailField.value = stripped ? stripped + '@gordoncollege.edu.ph' : '';
     }
 
-    // REGISTER
+    function togglePassword(fieldId, btn) {
+      const input = document.getElementById(fieldId);
+      const isText = input.type === 'text';
+      input.type = isText ? 'password' : 'text';
+      btn.style.color = isText ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.7)';
+    }
+
     document.getElementById('registerForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn       = document.getElementById('registerBtn');
       const errEl     = document.getElementById('registerError');
       const successEl = document.getElementById('registerSuccess');
-      errEl.textContent     = '';
-      successEl.textContent = '';
-      btn.disabled    = true;
-      btn.textContent = 'Creating account...';
+      errEl.textContent = ''; successEl.textContent = '';
+      btn.disabled = true; btn.childNodes[0].textContent = 'Creating account...';
 
       const fullName  = document.getElementById('regName').value.trim();
       const studentId = document.getElementById('regStudentId').value.trim();
@@ -362,39 +800,18 @@
       const block     = document.getElementById('regBlock').value.trim();
       const password  = document.getElementById('regPassword').value;
 
-      // Basic validation
-      if (!program || !yearLevel) {
-        errEl.textContent = 'Please select your program and year level.';
-        btn.disabled = false;
-        btn.textContent = 'Create Account →';
-        return;
-      }
-      if (password.length < 6) {
-        errEl.textContent = 'Password must be at least 6 characters.';
-        btn.disabled = false;
-        btn.textContent = 'Create Account →';
-        return;
-      }
-
-      // ✅ Email validation — gordoncollege.edu.ph lang
-      if (!email.endsWith('@gordoncollege.edu.ph')) {
-        errEl.textContent = 'Invalid email. Please enter a valid Student ID.';
-        btn.disabled = false;
-        btn.textContent = 'Create Account →';
-        return;
-      }
+      if (!program || !yearLevel) { errEl.textContent = 'Please select your program and year level.'; btn.disabled = false; btn.childNodes[0].textContent = 'Create Account'; return; }
+      if (password.length < 6)   { errEl.textContent = 'Password must be at least 6 characters.';    btn.disabled = false; btn.childNodes[0].textContent = 'Create Account'; return; }
+      if (!email.endsWith('@gordoncollege.edu.ph')) { errEl.textContent = 'Invalid email. Please enter a valid Student ID.'; btn.disabled = false; btn.childNodes[0].textContent = 'Create Account'; return; }
 
       const result = await api.register(fullName, studentId, email, program, block, yearLevel, password);
       if (result.success) {
         successEl.textContent = '✓ Account created! You can now sign in.';
         document.getElementById('registerForm').reset();
-        document.getElementById('regEmail').value = ''; // clear readonly field
+        document.getElementById('regEmail').value = '';
         setTimeout(() => switchTab('login'), 1500);
-      } else {
-        errEl.textContent = result.message;
-      }
-      btn.disabled = false;
-      btn.textContent = 'Create Account →';
+      } else { errEl.textContent = result.message; }
+      btn.disabled = false; btn.childNodes[0].textContent = 'Create Account';
     });
   </script>
 </body>
