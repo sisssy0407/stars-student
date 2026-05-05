@@ -445,7 +445,7 @@ a { color: inherit; text-decoration: none; }
   align-items: center;
   justify-content: space-between;
   margin-bottom: 12px;
-}
+} 
 .dark-mode-label {
   font-size: 13px;
   color: rgba(255,255,255,0.5);
@@ -623,4 +623,143 @@ a { color: inherit; text-decoration: none; }
     border-radius: var(--radius);
   }
   .login-brand h1 { font-size: 40px; }
+}
+
+/* ============================================
+   DARK MODE OVERRIDES
+   ============================================ */
+
+body.dark-mode {
+  background: var(--dark);
+  color: rgba(255, 255, 255, 0.88);
+}
+
+/* Main content background */
+body.dark-mode .app-page {
+  background: var(--dark);
+}
+
+body.dark-mode .main-content {
+  background: var(--dark);
+}
+
+/* Cards & Blocks */
+body.dark-mode .section-block,
+body.dark-mode .form-card,
+body.dark-mode .points-card,
+body.dark-mode .reward-card,
+body.dark-mode .ms-card,
+body.dark-mode .modal-box {
+  background: var(--slate2);
+  border-color: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.88);
+}
+
+/* Locked reward card */
+body.dark-mode .reward-card.locked {
+  background: var(--slate);
+}
+
+/* Text inside cards */
+body.dark-mode .page-title,
+body.dark-mode .section-block h3,
+body.dark-mode .reward-name,
+body.dark-mode .mot-banner-title,
+body.dark-mode .modal-box h3 {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+body.dark-mode .page-sub,
+body.dark-mode .reward-desc,
+body.dark-mode .mot-banner-sub,
+body.dark-mode .modal-box p {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* Table */
+body.dark-mode .data-table th {
+  color: rgba(255, 255, 255, 0.4);
+  border-bottom-color: rgba(255, 255, 255, 0.07);
+}
+body.dark-mode .data-table td {
+  color: rgba(255, 255, 255, 0.82);
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+}
+body.dark-mode .data-table tr:hover td {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* Form inputs */
+body.dark-mode .form-group label {
+  color: rgba(255, 255, 255, 0.6);
+}
+body.dark-mode .form-group input,
+body.dark-mode .form-group select,
+body.dark-mode .form-group textarea {
+  background: var(--slate);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.88);
+}
+body.dark-mode .form-group input:focus,
+body.dark-mode .form-group select:focus,
+body.dark-mode .form-group textarea:focus {
+  background: var(--slate2);
+  border-color: var(--orange);
+}
+body.dark-mode .form-group input::placeholder,
+body.dark-mode .form-group textarea::placeholder {
+  color: rgba(255, 255, 255, 0.25);
+}
+body.dark-mode .form-group select option {
+  background: var(--slate2);
+  color: rgba(255, 255, 255, 0.88);
+}
+
+/* Upload zone */
+body.dark-mode .upload-zone {
+  background: var(--slate);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.55);
+}
+body.dark-mode .upload-zone:hover {
+  border-color: var(--orange);
+  background: var(--orange-dim);
+}
+
+/* Info banner (yung blue notice sa Submit page) */
+body.dark-mode .info-banner,
+body.dark-mode [class*="info-"] {
+  background: rgba(59, 130, 246, 0.1);
+  color: rgba(255, 255, 255, 0.75);
+}
+body.dark-mode .info-banner strong {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+/* Balance pill */
+body.dark-mode .balance-pill {
+  background: var(--slate2);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.75);
+}
+
+/* Skeleton loading */
+body.dark-mode .skeleton {
+  background: linear-gradient(90deg, var(--slate) 25%, var(--slate2) 50%, var(--slate) 75%);
+  background-size: 200% 100%;
+}
+
+/* Milestone progress bar background */
+body.dark-mode .mot-progress-bar-wrap {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Ghost button */
+body.dark-mode .btn-ghost {
+  color: rgba(255, 255, 255, 0.75);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+body.dark-mode .btn-ghost:hover {
+  background: var(--orange-dim);
+  border-color: var(--orange);
 }

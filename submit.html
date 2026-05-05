@@ -121,6 +121,23 @@
   </main>
 
   <style>
+    body.dark-mode .submit-notice {
+  background: rgba(59, 130, 246, 0.12);
+  border-color: rgba(59, 130, 246, 0.25);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+body.dark-mode .submit-notice strong {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+body.dark-mode .field-note {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+body.dark-mode #pinGroup small {
+  color: rgba(255, 255, 255, 0.4) !important;
+}
     .submit-notice {
       display: flex;
       align-items: flex-start;
@@ -186,30 +203,38 @@
     })();
 
     // Hamburger menu
-    (function() {
-      const btn     = document.getElementById('hamburgerBtn');
-      const sidebar = document.getElementById('sidebar');
-      const overlay = document.getElementById('sidebarOverlay');
+(function() {
+  const btn     = document.getElementById('hamburgerBtn');
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebarOverlay');
 
-      function openSidebar() {
-        sidebar.classList.add('open');
-        overlay.classList.add('active');
-        btn.classList.add('open');
-        document.body.style.overflow = 'hidden';
-      }
-      function closeSidebar() {
-        sidebar.classList.remove('open');
-        overlay.classList.remove('active');
-        btn.classList.remove('open');
-        document.body.style.overflow = '';
-      }
+  function openSidebar() {
+    sidebar.classList.add('open');
+    overlay.classList.add('active');
+    btn.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeSidebar() {
+    sidebar.classList.remove('open');
+    overlay.classList.remove('active');
+    btn.classList.remove('open');
+    document.body.style.removeProperty('overflow'); // ← AYOS NITO
+  }
 
-      btn.addEventListener('click', openSidebar);
-      overlay.addEventListener('click', closeSidebar);
-      document.querySelectorAll('.nav-item').forEach(link => {
-        link.addEventListener('click', closeSidebar);
-      }); 
-    })();
+  btn.addEventListener('click', () => {
+    if (sidebar.classList.contains('open')) {
+      closeSidebar();
+    } else {
+      openSidebar(); // ← X button fix: toggle, hindi palaging open
+    }
+  });
+  
+  overlay.addEventListener('click', closeSidebar);
+
+  document.querySelectorAll('.nav-item').forEach(link => {
+    link.addEventListener('click', closeSidebar);
+  });
+})();
   </script>
 </body>
 </html>

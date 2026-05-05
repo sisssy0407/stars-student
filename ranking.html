@@ -102,6 +102,54 @@
       font-size: 0.88rem;
       font-weight: 600;
     }
+
+
+    /* ── DARK MODE FIXES ── */
+body.dark-mode .year-tab {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+body.dark-mode .year-tab:hover {
+  border-color: var(--orange);
+  color: var(--orange);
+}
+body.dark-mode .year-tab.active {
+  background: var(--orange);
+  border-color: var(--orange);
+  color: #fff;
+}
+
+body.dark-mode .ranking-wrapper {
+  background: var(--slate2);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+body.dark-mode .ranking-table th {
+  background: var(--slate2);
+  color: rgba(255, 255, 255, 0.4);
+  border-bottom-color: rgba(255, 255, 255, 0.07);
+}
+body.dark-mode .ranking-table td {
+  color: rgba(255, 255, 255, 0.82);
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+}
+body.dark-mode .ranking-table tr.me {
+  background: rgba(59, 130, 246, 0.12);
+}
+body.dark-mode .ranking-table tr:hover td {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+body.dark-mode .my-rank-pill {
+  background: var(--slate2);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.82);
+}
+
+body.dark-mode .empty-ranking,
+body.dark-mode .loading-ranking {
+  color: rgba(255, 255, 255, 0.4);
+}
   </style>
 </head>
 <body class="app-page">
@@ -202,30 +250,38 @@
     })();
 
     // Hamburger menu
-    (function() {
-      const btn     = document.getElementById('hamburgerBtn');
-      const sidebar = document.getElementById('sidebar');
-      const overlay = document.getElementById('sidebarOverlay');
+(function() {
+  const btn     = document.getElementById('hamburgerBtn');
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebarOverlay');
 
-      function openSidebar() {
-        sidebar.classList.add('open');
-        overlay.classList.add('active');
-        btn.classList.add('open');
-        document.body.style.overflow = 'hidden';
-      }
-      function closeSidebar() {
-        sidebar.classList.remove('open');
-        overlay.classList.remove('active');
-        btn.classList.remove('open');
-        document.body.style.overflow = '';
-      }
+  function openSidebar() {
+    sidebar.classList.add('open');
+    overlay.classList.add('active');
+    btn.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeSidebar() {
+    sidebar.classList.remove('open');
+    overlay.classList.remove('active');
+    btn.classList.remove('open');
+    document.body.style.removeProperty('overflow'); // ← AYOS NITO
+  }
 
-      btn.addEventListener('click', openSidebar);
-      overlay.addEventListener('click', closeSidebar);
-      document.querySelectorAll('.nav-item').forEach(link => {
-        link.addEventListener('click', closeSidebar);
-      });
-    })();
+  btn.addEventListener('click', () => {
+    if (sidebar.classList.contains('open')) {
+      closeSidebar();
+    } else {
+      openSidebar(); // ← X button fix: toggle, hindi palaging open
+    }
+  });
+  
+  overlay.addEventListener('click', closeSidebar);
+
+  document.querySelectorAll('.nav-item').forEach(link => {
+    link.addEventListener('click', closeSidebar);
+  });
+})();
   </script>
 </body>
 </html>
