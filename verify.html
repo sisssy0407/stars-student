@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>STARS — Email Verification</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #06082c;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+    .card {
+      background: #0f1758;
+      border: 1.5px solid #2c3c8a;
+      border-radius: 16px;
+      padding: 48px 40px;
+      max-width: 440px;
+      width: 90%;
+      text-align: center;
+    }
+    .brand { font-size: 28px; font-weight: 800; color: #ee781c; margin-bottom: 8px; }
+    .icon { font-size: 56px; margin: 24px 0; }
+    h2 { font-size: 22px; font-weight: 700; margin-bottom: 12px; }
+    p  { font-size: 14px; color: #9baad4; line-height: 1.6; margin-bottom: 24px; }
+    .btn {
+      display: inline-block;
+      background: #ee781c;
+      color: #fff;
+      padding: 12px 32px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 15px;
+    }
+    .success { color: #22c55e; }
+    .error   { color: #ef4444; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="brand">★ STARS</div>
+    <div class="icon" id="icon">⏳</div>
+    <h2 id="title">Verifying your email...</h2>
+    <p id="message">Please wait.</p>
+    <a href="index.html" class="btn" id="loginBtn" style="display:none;">Go to Login</a>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const token  = params.get('token');
+
+    if (!token) {
+      document.getElementById('icon').textContent    = '❌';
+      document.getElementById('title').textContent   = 'Invalid Link';
+      document.getElementById('message').textContent = 'No verification token found.';
+    } else {
+      fetch('http://localhost:8081/api/auth/verify?token=' + token)
+        .then(r => r.json())
+        .then(data => {
+          if (data.success) {
+            document.getElementById('icon').textContent        = '✅';
+            document.getElementById('title').textContent       = 'Email Verified!';
+            document.getElementById('title').className        = 'success';
+            document.getElementById('message').textContent    = 'Your account has been verified. You can now log in.';
+            document.getElementById('loginBtn').style.display = 'inline-block';
+          } else {
+            document.getElementById('icon').textContent     = '❌';
+            document.getElementById('title').textContent    = 'Verification Failed';
+            document.getElementById('title').className     = 'error';
+            document.getElementById('message').textContent = data.message || 'Invalid or expired link.';
+          }
+        })
+        .catch(() => {
+          document.getElementById('icon').textContent     = '❌';
+          document.getElementById('title').textContent    = 'Connection Error';
+          document.getElementById('message').textContent = 'Could not connect to server.';
+        });
+    }
+  </script>
+</body>
+</html>
