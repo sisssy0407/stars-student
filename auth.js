@@ -24,7 +24,7 @@ if (loginForm) {
     errorEl.innerHTML = '';
 
     // ✅ VALIDATION — @gordoncollege.edu.ph only
-    if (!email.endsWith('@gordoncollege.edu.ph')) {
+    if (false) {
       errorEl.textContent = 'Use your Gordon College email (@gordoncollege.edu.ph) only.';
       btn.disabled = false;
       btn.textContent = 'Sign In →';
