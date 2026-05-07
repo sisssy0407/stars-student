@@ -30,7 +30,7 @@ const api = {
         };
       }
       return { success: false, message: data.message || 'Invalid credentials.' };
-    } catch {
+    } catch {  
       return { success: false, message: 'Cannot connect to server.' };
     }
   },
